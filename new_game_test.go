@@ -40,6 +40,17 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, players[player2].cards, productMap{})
 	})
 
+	t.Run("Players have 0 camel", func(t *testing.T) {
+		player1 := Name("John")
+		player2 := Name("Jane")
+
+		game, _ := NewGame(player1, player2)
+		players := game.players
+
+		assert.Equal(t, players[player1].herdSize, Amount(0))
+		assert.Equal(t, players[player2].herdSize, Amount(0))
+	})
+
 	t.Run("There are 5 cards on the table", func(t *testing.T) {
 		game, _ := NewGame("a", "b")
 

@@ -21,7 +21,7 @@ func TestSellProduct(t *testing.T) {
 	for _, s := range simpleScenarios {
 		t.Run(s.name, func(t *testing.T) {
 			player1Name := Name("John")
-			player1 := player{player1Name, Score(0), productMap{s.goodsType: s.amount}}
+			player1 := player{player1Name, Score(0), productMap{s.goodsType: s.amount}, 0}
 			players := playerMap{player1Name: &player1}
 
 			game := game{
@@ -51,7 +51,7 @@ func TestSellProduct(t *testing.T) {
 	for _, s := range bonusScenarios {
 		t.Run(s.name, func(t *testing.T) {
 			player1Name := Name("John")
-			player1 := player{player1Name, Score(0), productMap{s.goodsType: s.amount}}
+			player1 := player{player1Name, Score(0), productMap{s.goodsType: s.amount}, 0}
 			players := playerMap{player1Name: &player1}
 
 			game := game{
@@ -68,7 +68,7 @@ func TestSellProduct(t *testing.T) {
 
 	t.Run("Error if not enough cards to sell", func(t *testing.T) {
 		player1Name := Name("John")
-		player1 := player{player1Name, Score(0), productMap{}}
+		player1 := player{player1Name, Score(0), productMap{}, 0}
 		players := playerMap{player1Name: &player1}
 
 		game := game{
@@ -91,5 +91,19 @@ func TestSellProduct(t *testing.T) {
 
 		error := game.SellProduct(&fakePlayerName, ProductSilver, 1)
 		assert.EqualError(t, error, PlayerNotExistsError.Error())
+	})
+
+	t.Run("Can't sell camel", func(t *testing.T) {
+		player1Name := Name("John")
+		player1 := player{player1Name, Score(0), productMap{ProductCamel: 2}, 0}
+		players := playerMap{player1Name: &player1}
+		game := game{
+			players:      players,
+			soldProducts: productMap{},
+		}
+
+		error := game.SellProduct(&player1Name, ProductCamel, 2)
+
+		assert.EqualError(t, error, SellingCamelForbiddenError.Error())
 	})
 }
