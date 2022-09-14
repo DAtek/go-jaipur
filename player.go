@@ -3,7 +3,7 @@ package jaipur
 type player struct {
 	name     Name
 	score    Score
-	cards    productMap
+	cards    goodMap
 	herdSize Amount
 }
 

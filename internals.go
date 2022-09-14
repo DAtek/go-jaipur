@@ -6,7 +6,7 @@ import (
 )
 
 func (game *game) moveCardsFromPackToTable(amount Amount) {
-	allCards_ := []ProductType{}
+	allCards_ := []GoodType{}
 	for key, value := range game.cardsInPack {
 		for i := Amount(0); i < value; i++ {
 			allCards_ = append(allCards_, key)

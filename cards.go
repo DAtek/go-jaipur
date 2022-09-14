@@ -1,11 +1,11 @@
 package jaipur
 
-var allCards = productMap{
-	ProductDiamond: 6,
-	ProductGold:    6,
-	ProductSilver:  6,
-	ProductSpice:   8,
-	ProductCloth:   8,
-	ProductLeather: 10,
-	ProductCamel:   11,
+var allCards = goodMap{
+	GoodDiamond: 6,
+	GoodGold:    6,
+	GoodSilver:  6,
+	GoodSpice:   8,
+	GoodCloth:   8,
+	GoodLeather: 10,
+	GoodCamel:   11,
 }

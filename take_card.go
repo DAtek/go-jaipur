@@ -3,7 +3,7 @@ package jaipur
 const NotEnoughCardsOnTableError = JaipurError("Not enough cards on the table")
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
-func (game *game) DrawCard(playerName Name, card ProductType) error {
+func (game *game) TakeCard(playerName Name, card GoodType) error {
 	player, ok := game.players[playerName]
 
 	if !ok {
@@ -25,7 +25,7 @@ func (game *game) DrawCard(playerName Name, card ProductType) error {
 	}
 
 	switch card {
-	case ProductCamel:
+	case GoodCamel:
 		player.herdSize += amount
 		game.cardsOnTable[card] -= amount
 		game.moveCardsFromPackToTable(amount)

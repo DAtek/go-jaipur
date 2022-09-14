@@ -2,9 +2,9 @@ package jaipur
 
 type (
 	Amount      uint8
-	ProductType uint8
+	GoodType    uint8
 	Score       uint8
-	productMap  map[ProductType]Amount
+	goodMap     map[GoodType]Amount
 	JaipurError string
 	Name        string
 )
