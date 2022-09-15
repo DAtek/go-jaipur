@@ -16,6 +16,7 @@ func TestSellGoods(t *testing.T) {
 		{"Sell 2 silvers", GoodSilver, 2, Score(10)},
 		{"Sell 2 golds", GoodGold, 2, Score(12)},
 		{"Sell 2 cloths", GoodCloth, 2, Score(8)},
+		{"Sell 1 spice", GoodSpice, 1, Score(5)},
 	}
 
 	for _, s := range simpleScenarios {
@@ -29,7 +30,7 @@ func TestSellGoods(t *testing.T) {
 				soldGoods: goodMap{},
 			}
 
-			game.SellGoods(&player1Name, s.goodsType, s.amount)
+			game.SellGoods(&player1Name, s.goodsType)
 
 			assert.Equal(t, player1.score, s.score)
 		})
@@ -59,27 +60,40 @@ func TestSellGoods(t *testing.T) {
 				soldGoods: goodMap{},
 			}
 
-			game.SellGoods(&player1Name, s.goodsType, s.amount)
+			game.SellGoods(&player1Name, s.goodsType)
 
 			assert.GreaterOrEqual(t, player1.score, s.minScore)
 			assert.LessOrEqual(t, player1.score, s.maxScore)
 		})
 	}
 
-	t.Run("Error if not enough cards to sell", func(t *testing.T) {
-		player1Name := Name("John")
-		player1 := player{player1Name, Score(0), goodMap{}, 0}
-		players := playerMap{player1Name: &player1}
+	notEnoughCardsToSellScenarios := []struct {
+		name      string
+		goodsType GoodType
+		amount    Amount
+	}{
+		{"Sell 1 diamond", GoodDiamond, 1},
+		{"Sell 1 gold", GoodGold, 1},
+		{"Sell 1 silver", GoodSilver, 1},
+		{"Sell 0 leather", GoodLeather, 0},
+	}
 
-		game := game{
-			players:   players,
-			soldGoods: goodMap{},
-		}
+	for _, s := range notEnoughCardsToSellScenarios {
+		t.Run(s.name, func(t *testing.T) {
+			player1Name := Name("John")
+			player1 := player{player1Name, Score(0), goodMap{s.goodsType: s.amount}, 0}
+			players := playerMap{player1Name: &player1}
 
-		error := game.SellGoods(&player1Name, GoodSilver, 1)
+			game := game{
+				players:   players,
+				soldGoods: goodMap{},
+			}
 
-		assert.EqualError(t, error, NotEnoughCardsError.Error())
-	})
+			error := game.SellGoods(&player1Name, s.goodsType)
+
+			assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
+		})
+	}
 
 	t.Run("Error if player doesn't exists", func(t *testing.T) {
 		game := game{
@@ -89,7 +103,7 @@ func TestSellGoods(t *testing.T) {
 
 		fakePlayerName := Name("a")
 
-		error := game.SellGoods(&fakePlayerName, GoodSilver, 1)
+		error := game.SellGoods(&fakePlayerName, GoodSilver)
 		assert.EqualError(t, error, PlayerNotExistsError.Error())
 	})
 
@@ -102,7 +116,7 @@ func TestSellGoods(t *testing.T) {
 			soldGoods: goodMap{},
 		}
 
-		error := game.SellGoods(&player1Name, GoodCamel, 2)
+		error := game.SellGoods(&player1Name, GoodCamel)
 
 		assert.EqualError(t, error, SellingCamelForbiddenError.Error())
 	})

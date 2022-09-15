@@ -1,6 +1,5 @@
 package jaipur
 
-const NotEnoughCardsOnTableError = JaipurError("Not enough cards on the table")
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
 func (game *game) TakeCard(playerName Name, card GoodType) error {

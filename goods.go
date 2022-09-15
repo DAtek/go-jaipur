@@ -1,11 +1,13 @@
 package jaipur
 
 const (
-	GoodSilver GoodType = iota
+	GoodDiamond GoodType = iota
 	GoodGold
-	GoodDiamond
+	GoodSilver
 	GoodCloth
 	GoodSpice
 	GoodLeather
 	GoodCamel
 )
+
+var expensiveGoods = []GoodType{GoodDiamond, GoodGold, GoodSilver}

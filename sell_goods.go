@@ -1,9 +1,8 @@
 package jaipur
 
-const NotEnoughCardsError = JaipurError("Player doesn't have enough cards to sell")
 const SellingCamelForbiddenError = JaipurError("Selling camels is forbidden")
 
-func (game *game) SellGoods(playerName *Name, goodType GoodType, amount Amount) error {
+func (game *game) SellGoods(playerName *Name, goodType GoodType) error {
 	if goodType == GoodCamel {
 		return SellingCamelForbiddenError
 	}
@@ -14,8 +13,17 @@ func (game *game) SellGoods(playerName *Name, goodType GoodType, amount Amount) 
 		return PlayerNotExistsError
 	}
 
-	if player.cards[goodType] < amount {
-		return NotEnoughCardsError
+	amount := player.cards[goodType]
+	if amount == 0 {
+		return NotEnoughCardsToSellError
+	}
+
+	if amount == 1 {
+		for _, expensiveGood := range expensiveGoods {
+			if goodType == expensiveGood {
+				return NotEnoughCardsToSellError
+			}
+		}
 	}
 
 	newScore := Score(0)
@@ -28,6 +36,7 @@ func (game *game) SellGoods(playerName *Name, goodType GoodType, amount Amount) 
 	}
 
 	newScore += getBonus(amount)
+	player.cards[goodType] -= amount
 	player.score = newScore
 	return nil
 }
