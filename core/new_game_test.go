@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 import (
 	"testing"

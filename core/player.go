@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 type player struct {
 	name     Name

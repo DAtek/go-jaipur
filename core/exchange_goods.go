@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 const GoodsAmountsMismatchError = JaipurError("Goods amounts mismatch")
 

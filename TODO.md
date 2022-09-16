@@ -1,0 +1,6 @@
+- Remove the player name parameter from the actions, only the current player can take an action
+- Implement round ended
+- Implement game ended
+- Implement round winner
+- Implement game winner
+- Implement excellence points

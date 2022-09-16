@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 type game struct {
 	players      playerMap

@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 var bonuses = map[Amount][2]Score{
 	3: {1, 3},

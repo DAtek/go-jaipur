@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 var coins = map[GoodType][]Score{
 	GoodDiamond: {7, 7, 5, 5, 5},

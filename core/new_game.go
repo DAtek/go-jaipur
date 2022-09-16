@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 const SameNamesError = JaipurError("Players have the same name")
 

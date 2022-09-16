@@ -1,4 +1,4 @@
-package jaipur
+package core
 
 var allCards = goodMap{
 	GoodDiamond: 6,
