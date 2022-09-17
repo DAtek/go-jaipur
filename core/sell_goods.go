@@ -2,18 +2,12 @@ package core
 
 const SellingCamelForbiddenError = JaipurError("Selling camels is forbidden")
 
-func (game *game) SellGoods(playerName *Name, goodType GoodType) error {
+func (game *game) SellGoods(goodType GoodType) error {
 	if goodType == GoodCamel {
 		return SellingCamelForbiddenError
 	}
 
-	player, ok := game.players[*playerName]
-
-	if !ok {
-		return PlayerNotExistsError
-	}
-
-	amount := player.cards[goodType]
+	amount := game.currentPlayer.cards[goodType]
 	if amount == 0 {
 		return NotEnoughCardsToSellError
 	}
@@ -36,7 +30,8 @@ func (game *game) SellGoods(playerName *Name, goodType GoodType) error {
 	}
 
 	newScore += getBonus(amount)
-	player.cards[goodType] -= amount
-	player.score = newScore
+	game.currentPlayer.cards[goodType] -= amount
+	game.currentPlayer.score = newScore
+	game.changeCurrentPlayer()
 	return nil
 }

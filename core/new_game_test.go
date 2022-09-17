@@ -8,47 +8,32 @@ import (
 
 func TestNewGame(t *testing.T) {
 	t.Run("Players have correct name", func(t *testing.T) {
-		player1 := Name("John")
-		player2 := Name("Jane")
+		player1 := Name("a")
+		player2 := Name("b")
 
 		game, _ := NewGame(player1, player2)
-		players := game.players
 
-		assert.Equal(t, players[player1].name, player1)
-		assert.Equal(t, players[player2].name, player2)
+		assert.Equal(t, player1, game.player1.name)
+		assert.Equal(t, player2, game.player2.name)
+	})
+
+	t.Run("Current player is player 1", func(t *testing.T) {
+		player1 := Name("a")
+		player2 := Name("b")
+
+		game, _ := NewGame(player1, player2)
+
+		assert.Equal(t, player1, game.currentPlayer.name)
 	})
 
 	t.Run("Players have 0 points", func(t *testing.T) {
-		player1 := Name("John")
-		player2 := Name("Jane")
+		player1 := Name("a")
+		player2 := Name("b")
 
 		game, _ := NewGame(player1, player2)
-		players := game.players
 
-		assert.Equal(t, players[player1].score, Score(0))
-		assert.Equal(t, players[player2].score, Score(0))
-	})
-
-	t.Run("Players have 0 points", func(t *testing.T) {
-		player1 := Name("John")
-		player2 := Name("Jane")
-
-		game, _ := NewGame(player1, player2)
-		players := game.players
-
-		assert.Equal(t, players[player1].cards, goodMap{})
-		assert.Equal(t, players[player2].cards, goodMap{})
-	})
-
-	t.Run("Players have 0 camel", func(t *testing.T) {
-		player1 := Name("John")
-		player2 := Name("Jane")
-
-		game, _ := NewGame(player1, player2)
-		players := game.players
-
-		assert.Equal(t, players[player1].herdSize, Amount(0))
-		assert.Equal(t, players[player2].herdSize, Amount(0))
+		assert.Equal(t, Score(0), game.player1.score)
+		assert.Equal(t, Score(0), game.player2.score)
 	})
 
 	t.Run("There are 5 cards on the table", func(t *testing.T) {
@@ -58,17 +43,28 @@ func TestNewGame(t *testing.T) {
 		for _, value := range game.cardsOnTable {
 			cardsOnTable += value
 		}
-		assert.Equal(t, cardsOnTable, Amount(5))
+		assert.Equal(t, Amount(5), cardsOnTable)
 	})
 
 	t.Run("There are at least 3 camels on the table", func(t *testing.T) {
 		game, _ := NewGame("a", "b")
 
-		assert.GreaterOrEqual(t, game.cardsOnTable[GoodCamel], Amount(3))
+		assert.GreaterOrEqual(t, Amount(3), game.cardsOnTable[GoodCamel])
+	})
+
+	t.Run("There are 40 cards in the pack", func(t *testing.T) {
+		game, _ := NewGame("a", "b")
+
+		cardsInPack := Amount(0)
+		for _, amount := range game.cardsInPack {
+			cardsInPack += amount
+		}
+
+		assert.Equal(t, Amount(40), cardsInPack)
 	})
 
 	t.Run("Can't create game with same player names", func(t *testing.T) {
-		_, err := NewGame("John", "John")
+		_, err := NewGame("a", "a")
 
 		assert.EqualError(t, err, SameNamesError.Error())
 	})

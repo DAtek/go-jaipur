@@ -21,18 +21,12 @@ func TestSellGoods(t *testing.T) {
 
 	for _, s := range simpleScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			player1Name := Name("John")
-			player1 := player{player1Name, Score(0), goodMap{s.goodsType: s.amount}, 0}
-			players := playerMap{player1Name: &player1}
+			game := newGame()
+			game.player1.cards = goodMap{s.goodsType: s.amount}
 
-			game := game{
-				players:   players,
-				soldGoods: goodMap{},
-			}
+			game.SellGoods(s.goodsType)
 
-			game.SellGoods(&player1Name, s.goodsType)
-
-			assert.Equal(t, player1.score, s.score)
+			assert.Equal(t, s.score, game.player1.score)
 		})
 	}
 
@@ -51,19 +45,13 @@ func TestSellGoods(t *testing.T) {
 
 	for _, s := range bonusScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			player1Name := Name("John")
-			player1 := player{player1Name, Score(0), goodMap{s.goodsType: s.amount}, 0}
-			players := playerMap{player1Name: &player1}
+			game := newGame()
+			game.player1.cards = goodMap{s.goodsType: s.amount}
 
-			game := game{
-				players:   players,
-				soldGoods: goodMap{},
-			}
+			game.SellGoods(s.goodsType)
 
-			game.SellGoods(&player1Name, s.goodsType)
-
-			assert.GreaterOrEqual(t, player1.score, s.minScore)
-			assert.LessOrEqual(t, player1.score, s.maxScore)
+			assert.GreaterOrEqual(t, game.player1.score, s.minScore)
+			assert.LessOrEqual(t, game.player1.score, s.maxScore)
 		})
 	}
 
@@ -80,44 +68,30 @@ func TestSellGoods(t *testing.T) {
 
 	for _, s := range notEnoughCardsToSellScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			player1Name := Name("John")
-			player1 := player{player1Name, Score(0), goodMap{s.goodsType: s.amount}, 0}
-			players := playerMap{player1Name: &player1}
+			game := newGame()
+			game.player1.cards = goodMap{s.goodsType: s.amount}
 
-			game := game{
-				players:   players,
-				soldGoods: goodMap{},
-			}
-
-			error := game.SellGoods(&player1Name, s.goodsType)
+			error := game.SellGoods(s.goodsType)
 
 			assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
 		})
 	}
 
-	t.Run("Error if player doesn't exists", func(t *testing.T) {
-		game := game{
-			players:   playerMap{},
-			soldGoods: goodMap{},
-		}
-
-		fakePlayerName := Name("a")
-
-		error := game.SellGoods(&fakePlayerName, GoodSilver)
-		assert.EqualError(t, error, PlayerNotExistsError.Error())
-	})
-
 	t.Run("Can't sell camel", func(t *testing.T) {
-		player1Name := Name("John")
-		player1 := player{player1Name, Score(0), goodMap{GoodCamel: 2}, 0}
-		players := playerMap{player1Name: &player1}
-		game := game{
-			players:   players,
-			soldGoods: goodMap{},
-		}
+		game := newGame()
+		game.player1.cards = goodMap{GoodCamel: 2}
 
-		error := game.SellGoods(&player1Name, GoodCamel)
+		error := game.SellGoods(GoodCamel)
 
 		assert.EqualError(t, error, SellingCamelForbiddenError.Error())
+	})
+
+	t.Run("Current player changes", func(t *testing.T) {
+		game := newGame()
+		game.player1.cards = goodMap{GoodDiamond: 2}
+
+		game.SellGoods(GoodDiamond)
+
+		assert.Equal(t, game.player2.name, game.currentPlayer.name)
 	})
 }

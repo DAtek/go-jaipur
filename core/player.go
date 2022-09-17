@@ -6,5 +6,3 @@ type player struct {
 	cards    goodMap
 	herdSize Amount
 }
-
-type playerMap map[Name]*player

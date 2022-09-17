@@ -2,13 +2,7 @@ package core
 
 const GoodsAmountsMismatchError = JaipurError("Goods amounts mismatch")
 
-func (game *game) ExchangeGoods(playerName Name, buy goodMap, sell goodMap) error {
-	player, ok := game.players[playerName]
-
-	if !ok {
-		return PlayerNotExistsError
-	}
-
+func (game *game) ExchangeGoods(buy goodMap, sell goodMap) error {
 	amountExchangeSum := Amount(0)
 
 	for key, value := range buy {
@@ -20,7 +14,7 @@ func (game *game) ExchangeGoods(playerName Name, buy goodMap, sell goodMap) erro
 
 	for key, value := range sell {
 		amountExchangeSum -= value
-		if player.cards[key] < value {
+		if game.currentPlayer.cards[key] < value {
 			return NotEnoughCardsToSellError
 		}
 	}
@@ -31,13 +25,15 @@ func (game *game) ExchangeGoods(playerName Name, buy goodMap, sell goodMap) erro
 
 	for key, value := range sell {
 		game.cardsOnTable[key] += value
-		player.cards[key] -= value
+		game.currentPlayer.cards[key] -= value
 	}
 
 	for key, value := range buy {
-		player.cards[key] += value
+		game.currentPlayer.cards[key] += value
 		game.cardsOnTable[key] -= value
 	}
+
+	game.changeCurrentPlayer()
 
 	return nil
 }

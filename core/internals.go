@@ -6,20 +6,55 @@ import (
 )
 
 func (game *game) moveCardsFromPackToTable(amount Amount) {
-	allCards_ := []GoodType{}
-	for key, value := range game.cardsInPack {
-		for i := Amount(0); i < value; i++ {
-			allCards_ = append(allCards_, key)
-		}
-	}
+	allCards := game.getAllCardsFromPack()
 
 	for i := Amount(0); i < amount; i++ {
 		rand.Seed(time.Now().UnixNano())
-		cardIndex := rand.Intn(len(allCards_))
-		card := allCards_[cardIndex]
+		cardIndex := rand.Intn(len(allCards))
+		card := allCards[cardIndex]
 		game.cardsInPack[card]--
 		game.cardsOnTable[card]++
-		allCards_ = append(allCards_[:cardIndex], allCards_[cardIndex+1:]...)
+		allCards = append(allCards[:cardIndex], allCards[cardIndex+1:]...)
+	}
+}
+
+func (game *game) take5RandomCards(player *player) {
+	allCards := game.getAllCardsFromPack()
+
+	for i := Amount(0); i < 5; i++ {
+		rand.Seed(time.Now().UnixNano())
+		cardIndex := rand.Intn(len(allCards))
+		card := allCards[cardIndex]
+		game.cardsInPack[card]--
+
+		switch card {
+		case GoodCamel:
+			player.herdSize++
+		default:
+			player.cards[card]++
+		}
+
+		allCards = append(allCards[:cardIndex], allCards[cardIndex+1:]...)
+	}
+
+}
+
+func (game *game) getAllCardsFromPack() []GoodType {
+	allCards := []GoodType{}
+	for key, value := range game.cardsInPack {
+		for i := Amount(0); i < value; i++ {
+			allCards = append(allCards, key)
+		}
+	}
+	return allCards
+}
+
+func (game *game) changeCurrentPlayer() {
+	switch game.currentPlayer.name {
+	case game.player1.name:
+		game.currentPlayer = game.player2
+	case game.player2.name:
+		game.currentPlayer = game.player1
 	}
 }
 

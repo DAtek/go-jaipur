@@ -2,15 +2,9 @@ package core
 
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
-func (game *game) TakeCard(playerName Name, card GoodType) error {
-	player, ok := game.players[playerName]
-
-	if !ok {
-		return PlayerNotExistsError
-	}
-
+func (game *game) TakeCard(card GoodType) error {
 	sumPlayerCards := Amount(0)
-	for _, amount := range player.cards {
+	for _, amount := range game.currentPlayer.cards {
 		sumPlayerCards += amount
 	}
 
@@ -25,11 +19,11 @@ func (game *game) TakeCard(playerName Name, card GoodType) error {
 
 	switch card {
 	case GoodCamel:
-		player.herdSize += amount
+		game.currentPlayer.herdSize += amount
 		game.cardsOnTable[card] -= amount
 		game.moveCardsFromPackToTable(amount)
 	default:
-		player.cards[card] += 1
+		game.currentPlayer.cards[card] += 1
 		game.cardsOnTable[card] -= 1
 		game.moveCardsFromPackToTable(1)
 	}
