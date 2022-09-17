@@ -3,6 +3,14 @@ package core
 const GoodsAmountsMismatchError = JaipurError("Goods amounts mismatch")
 
 func (game *game) ExchangeGoods(buy goodMap, sell goodMap) error {
+	if game.gameEnded() {
+		return GameEndedError
+	}
+
+	if game.roundEnded() {
+		return RoundEndedError
+	}
+
 	amountExchangeSum := Amount(0)
 
 	for key, value := range buy {

@@ -3,6 +3,14 @@ package core
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
 func (game *game) TakeCard(card GoodType) error {
+	if game.gameEnded() {
+		return GameEndedError
+	}
+
+	if game.roundEnded() {
+		return RoundEndedError
+	}
+
 	sumPlayerCards := Amount(0)
 	for _, amount := range game.currentPlayer.cards {
 		sumPlayerCards += amount
@@ -27,6 +35,8 @@ func (game *game) TakeCard(card GoodType) error {
 		game.cardsOnTable[card] -= 1
 		game.moveCardsFromPackToTable(1)
 	}
+
+	game.changeCurrentPlayer()
 
 	return nil
 }

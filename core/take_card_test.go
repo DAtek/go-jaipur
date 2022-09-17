@@ -16,6 +16,16 @@ func TestTakeCard(t *testing.T) {
 		assert.Equal(t, goodMap{GoodDiamond: Amount(2)}, game.player1.cards)
 	})
 
+	t.Run("Current player changes", func(t *testing.T) {
+		game := newGame()
+		game.player2.cards = goodMap{GoodDiamond: Amount(1)}
+		game.currentPlayer = game.player2
+
+		game.TakeCard(GoodDiamond)
+
+		assert.Equal(t, game.player1, game.currentPlayer)
+	})
+
 	t.Run("Player takes all camels", func(t *testing.T) {
 		game := newGame()
 		game.cardsOnTable = goodMap{GoodCamel: Amount(5)}
@@ -74,5 +84,32 @@ func TestTakeCard(t *testing.T) {
 		}
 
 		assert.Equal(t, Amount(4), cards)
+	})
+
+	t.Run("Error if round ended", func(t *testing.T) {
+		game := newGame()
+		game.roundEnded = func() bool { return true }
+
+		error := game.TakeCard(GoodCloth)
+
+		assert.EqualError(t, error, RoundEndedError.Error())
+	})
+
+	t.Run("Error if game ended", func(t *testing.T) {
+		game := newGame()
+		game.gameEnded = func() bool { return true }
+
+		error := game.TakeCard(GoodCloth)
+
+		assert.EqualError(t, error, GameEndedError.Error())
+	})
+
+	t.Run("Error if player has too many cards", func(t *testing.T) {
+		game := newGame()
+		game.player1.cards = goodMap{GoodDiamond: 7}
+
+		error := game.TakeCard(GoodCloth)
+
+		assert.EqualError(t, error, PlayerHasTooManyCardsError.Error())
 	})
 }

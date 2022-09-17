@@ -25,7 +25,7 @@ func TestRoundEnded(t *testing.T) {
 			game := newGame()
 			game.soldGoods = s
 
-			assert.Equal(t, true, game.RoundEnded())
+			assert.Equal(t, true, roundEnded(game))
 		})
 	}
 
@@ -33,7 +33,7 @@ func TestRoundEnded(t *testing.T) {
 		game := newGame()
 		game.cardsOnTable = goodMap{}
 
-		assert.Equal(t, true, game.RoundEnded())
+		assert.Equal(t, true, roundEnded(game))
 	})
 
 }

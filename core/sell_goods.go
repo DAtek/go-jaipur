@@ -3,6 +3,14 @@ package core
 const SellingCamelForbiddenError = JaipurError("Selling camels is forbidden")
 
 func (game *game) SellGoods(goodType GoodType) error {
+	if game.gameEnded() {
+		return GameEndedError
+	}
+
+	if game.roundEnded() {
+		return RoundEndedError
+	}
+
 	if goodType == GoodCamel {
 		return SellingCamelForbiddenError
 	}

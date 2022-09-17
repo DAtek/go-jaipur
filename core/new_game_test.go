@@ -78,4 +78,16 @@ func TestNewGame(t *testing.T) {
 
 		assert.EqualError(t, err, SameNamesError.Error())
 	})
+
+	t.Run("Round ended method is working", func(t *testing.T) {
+		game, _ := NewGame("a", "b")
+
+		assert.False(t, game.RoundEnded())
+	})
+
+	t.Run("Game ended method is working", func(t *testing.T) {
+		game, _ := NewGame("a", "b")
+
+		assert.False(t, game.GameEnded())
+	})
 }

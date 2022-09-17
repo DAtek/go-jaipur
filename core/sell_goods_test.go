@@ -104,4 +104,22 @@ func TestSellGoods(t *testing.T) {
 
 		assert.Equal(t, game.player2.name, game.currentPlayer.name)
 	})
+
+	t.Run("Error if round ended", func(t *testing.T) {
+		game := newGame()
+		game.roundEnded = func() bool { return true }
+
+		error := game.SellGoods(GoodCloth)
+
+		assert.EqualError(t, error, RoundEndedError.Error())
+	})
+
+	t.Run("Error if game ended", func(t *testing.T) {
+		game := newGame()
+		game.gameEnded = func() bool { return true }
+
+		error := game.SellGoods(GoodCloth)
+
+		assert.EqualError(t, error, GameEndedError.Error())
+	})
 }

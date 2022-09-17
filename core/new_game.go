@@ -7,27 +7,40 @@ func NewGame(player1Name, player2Name Name) (*game, error) {
 		return nil, error(SameNamesError)
 	}
 
-	player1 := &player{player1Name, Score(0), goodMap{}, 0, Score(0)}
-
-	game := game{
-		player1:       player1,
-		player2:       &player{player2Name, Score(0), goodMap{}, 0, Score(0)},
-		soldGoods:     goodMap{},
-		cardsOnTable:  goodMap{},
-		cardsInPack:   goodMap{},
-		currentPlayer: player1,
+	game := &game{
+		player1:      &player{name: player1Name, sealsOfExcellence: 0},
+		player2:      &player{name: player2Name, sealsOfExcellence: 0},
+		soldGoods:    goodMap{},
+		cardsOnTable: goodMap{},
+		cardsInPack:  goodMap{},
 	}
 
-	for key, value := range cardsInGame {
-		game.cardsInPack[key] = value
+	game.roundEnded = func() bool {
+		return roundEnded(game)
 	}
 
-	game.cardsOnTable[GoodCamel] = 3
-	game.cardsInPack[GoodCamel] -= 3
+	game.gameEnded = func() bool {
+		return gameEnded(game)
+	}
 
-	game.moveCardsFromPackToTable(2)
-	game.take5RandomCards(player1)
-	game.take5RandomCards(game.player2)
+	game.currentPlayer = game.player1
 
-	return &game, nil
+	resetAfterRound := func() {
+		for key, value := range cardsInGame {
+			game.cardsInPack[key] = value
+		}
+		game.player1.resetAfterRound()
+		game.player2.resetAfterRound()
+		game.cardsOnTable[GoodCamel] = 3
+		game.cardsInPack[GoodCamel] -= 3
+
+		game.moveCardsFromPackToTable(2)
+		game.take5RandomCards(game.player1)
+		game.take5RandomCards(game.player2)
+	}
+
+	game.resetAfterRound = resetAfterRound
+	game.resetAfterRound()
+
+	return game, nil
 }

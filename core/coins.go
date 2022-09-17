@@ -7,4 +7,5 @@ var coins = map[GoodType][]Score{
 	GoodCloth:   {5, 3, 3, 2, 2, 1, 1},
 	GoodSpice:   {5, 3, 3, 2, 2, 1, 1},
 	GoodLeather: {4, 3, 2, 1, 1, 1, 1, 1, 1},
+	GoodCamel:   {5},
 }

@@ -60,6 +60,17 @@ func TestExchangeGoods(t *testing.T) {
 		assert.Equal(t, Amount(1), game.cardsOnTable[GoodLeather])
 	})
 
+	t.Run("Current player changes", func(t *testing.T) {
+		game := newGame()
+
+		game.ExchangeGoods(
+			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+		)
+
+		assert.Equal(t, game.player2.name, game.currentPlayer.name)
+	})
+
 	t.Run("Error if player doesn't have proper cards", func(t *testing.T) {
 		game := newGame()
 		game.player1.cards = goodMap{}
@@ -92,14 +103,21 @@ func TestExchangeGoods(t *testing.T) {
 		assert.EqualError(t, error, GoodsAmountsMismatchError.Error())
 	})
 
-	t.Run("Current player changes", func(t *testing.T) {
+	t.Run("Error if round ended", func(t *testing.T) {
 		game := newGame()
+		game.roundEnded = func() bool { return true }
 
-		game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
-		)
+		error := game.ExchangeGoods(goodMap{GoodCloth: 3}, goodMap{GoodDiamond: 2})
 
-		assert.Equal(t, game.player2.name, game.currentPlayer.name)
+		assert.EqualError(t, error, RoundEndedError.Error())
+	})
+
+	t.Run("Error if game ended", func(t *testing.T) {
+		game := newGame()
+		game.gameEnded = func() bool { return true }
+
+		error := game.ExchangeGoods(goodMap{GoodCloth: 3}, goodMap{GoodDiamond: 2})
+
+		assert.EqualError(t, error, GameEndedError.Error())
 	})
 }
