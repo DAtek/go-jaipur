@@ -7,11 +7,11 @@ func NewGame(player1Name, player2Name Name) (*game, error) {
 		return nil, error(SameNamesError)
 	}
 
-	player1 := &player{player1Name, Score(0), goodMap{}, 0}
+	player1 := &player{player1Name, Score(0), goodMap{}, 0, Score(0)}
 
 	game := game{
 		player1:       player1,
-		player2:       &player{player2Name, Score(0), goodMap{}, 0},
+		player2:       &player{player2Name, Score(0), goodMap{}, 0, Score(0)},
 		soldGoods:     goodMap{},
 		cardsOnTable:  goodMap{},
 		cardsInPack:   goodMap{},

@@ -36,6 +36,16 @@ func TestNewGame(t *testing.T) {
 		assert.Equal(t, Score(0), game.player2.score)
 	})
 
+	t.Run("Players have 0 seals of excellence", func(t *testing.T) {
+		player1 := Name("a")
+		player2 := Name("b")
+
+		game, _ := NewGame(player1, player2)
+
+		assert.Equal(t, Score(0), game.player1.sealsOfExcellence)
+		assert.Equal(t, Score(0), game.player2.sealsOfExcellence)
+	})
+
 	t.Run("There are 5 cards on the table", func(t *testing.T) {
 		game, _ := NewGame("a", "b")
 
@@ -49,7 +59,7 @@ func TestNewGame(t *testing.T) {
 	t.Run("There are at least 3 camels on the table", func(t *testing.T) {
 		game, _ := NewGame("a", "b")
 
-		assert.GreaterOrEqual(t, Amount(3), game.cardsOnTable[GoodCamel])
+		assert.GreaterOrEqual(t, game.cardsOnTable[GoodCamel], Amount(3))
 	})
 
 	t.Run("There are 40 cards in the pack", func(t *testing.T) {

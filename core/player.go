@@ -1,8 +1,9 @@
 package core
 
 type player struct {
-	name     Name
-	score    Score
-	cards    goodMap
-	herdSize Amount
+	name              Name
+	score             Score
+	cards             goodMap
+	herdSize          Amount
+	sealsOfExcellence Score
 }

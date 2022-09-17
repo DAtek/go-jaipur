@@ -3,8 +3,8 @@ package core
 func newGame() *game {
 	player1Name := Name("Max")
 	player2Name := Name("Martha")
-	player1 := player{player1Name, Score(0), goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)}, 0}
-	player2 := player{player2Name, Score(0), goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)}, 0}
+	player1 := player{player1Name, Score(0), goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)}, 0, Score(0)}
+	player2 := player{player2Name, Score(0), goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)}, 0, Score(0)}
 
 	return &game{
 		player1:       &player1,

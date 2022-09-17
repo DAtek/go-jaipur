@@ -60,4 +60,19 @@ func TestTakeCard(t *testing.T) {
 			assert.EqualError(t, e, NotEnoughCardsOnTableError.Error())
 		})
 	}
+
+	t.Run("There is no enough cards in pack", func(t *testing.T) {
+		game := newGame()
+		game.cardsOnTable = goodMap{GoodDiamond: Amount(5)}
+		game.cardsInPack = goodMap{}
+
+		game.TakeCard(GoodDiamond)
+
+		cards := Amount(0)
+		for _, amount := range game.cardsOnTable {
+			cards += amount
+		}
+
+		assert.Equal(t, Amount(4), cards)
+	})
 }

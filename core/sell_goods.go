@@ -20,18 +20,16 @@ func (game *game) SellGoods(goodType GoodType) error {
 		}
 	}
 
-	newScore := Score(0)
 	for i := Amount(0); i < amount; i++ {
 		soldGoods := game.soldGoods
 		actualIndex := soldGoods[goodType]
 		score := coins[goodType][actualIndex]
 		soldGoods[goodType] = actualIndex + 1
-		newScore += score
+		game.currentPlayer.score += score
 	}
 
-	newScore += getBonus(amount)
+	game.currentPlayer.score += getBonus(amount)
 	game.currentPlayer.cards[goodType] -= amount
-	game.currentPlayer.score = newScore
 	game.changeCurrentPlayer()
 	return nil
 }

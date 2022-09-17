@@ -8,6 +8,10 @@ import (
 func (game *game) moveCardsFromPackToTable(amount Amount) {
 	allCards := game.getAllCardsFromPack()
 
+	if Amount(len(allCards)) < amount {
+		return
+	}
+
 	for i := Amount(0); i < amount; i++ {
 		rand.Seed(time.Now().UnixNano())
 		cardIndex := rand.Intn(len(allCards))

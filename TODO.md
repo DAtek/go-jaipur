@@ -1,4 +1,3 @@
-- Implement round ended
 - Implement game ended
 - Implement round winner
 - Implement game winner

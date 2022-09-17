@@ -77,6 +77,16 @@ func TestSellGoods(t *testing.T) {
 		})
 	}
 
+	t.Run("New score adds up to player's score", func(t *testing.T) {
+		game := newGame()
+		game.player1.cards = goodMap{GoodSilver: 2}
+		game.player1.score = Score(1)
+
+		game.SellGoods(GoodSilver)
+
+		assert.Equal(t, Score(11), game.player1.score)
+	})
+
 	t.Run("Can't sell camel", func(t *testing.T) {
 		game := newGame()
 		game.player1.cards = goodMap{GoodCamel: 2}
