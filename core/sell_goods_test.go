@@ -22,7 +22,7 @@ func TestSellGoods(t *testing.T) {
 	for _, s := range simpleScenarios {
 		t.Run(s.name, func(t *testing.T) {
 			game := newGame()
-			game.player1.cards = goodMap{s.goodsType: s.amount}
+			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			game.SellGoods(s.goodsType)
 
@@ -46,7 +46,7 @@ func TestSellGoods(t *testing.T) {
 	for _, s := range bonusScenarios {
 		t.Run(s.name, func(t *testing.T) {
 			game := newGame()
-			game.player1.cards = goodMap{s.goodsType: s.amount}
+			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			game.SellGoods(s.goodsType)
 
@@ -69,7 +69,7 @@ func TestSellGoods(t *testing.T) {
 	for _, s := range notEnoughCardsToSellScenarios {
 		t.Run(s.name, func(t *testing.T) {
 			game := newGame()
-			game.player1.cards = goodMap{s.goodsType: s.amount}
+			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			error := game.SellGoods(s.goodsType)
 
@@ -79,7 +79,7 @@ func TestSellGoods(t *testing.T) {
 
 	t.Run("New score adds up to player's score", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{GoodSilver: 2}
+		game.player1.cards = GoodMap{GoodSilver: 2}
 		game.player1.score = Score(1)
 
 		game.SellGoods(GoodSilver)
@@ -89,7 +89,7 @@ func TestSellGoods(t *testing.T) {
 
 	t.Run("Can't sell camel", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{GoodCamel: 2}
+		game.player1.cards = GoodMap{GoodCamel: 2}
 
 		error := game.SellGoods(GoodCamel)
 
@@ -98,7 +98,7 @@ func TestSellGoods(t *testing.T) {
 
 	t.Run("Current player changes", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{GoodDiamond: 2}
+		game.player1.cards = GoodMap{GoodDiamond: 2}
 
 		game.SellGoods(GoodDiamond)
 

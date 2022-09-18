@@ -1,6 +1,6 @@
 package core
 
-var cardsInGame = goodMap{
+var cardsInGame = GoodMap{
 	GoodDiamond: 6,
 	GoodGold:    6,
 	GoodSilver:  6,

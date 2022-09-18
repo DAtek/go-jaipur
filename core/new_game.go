@@ -2,17 +2,17 @@ package core
 
 const SameNamesError = JaipurError("Players have the same name")
 
-func NewGame(player1Name, player2Name Name) (*game, error) {
+func NewGame(player1Name, player2Name Name) (*Game, error) {
 	if player1Name == player2Name {
 		return nil, error(SameNamesError)
 	}
 
-	game := &game{
+	game := &Game{
 		player1:      &player{name: player1Name, sealsOfExcellence: 0},
 		player2:      &player{name: player2Name, sealsOfExcellence: 0},
-		soldGoods:    goodMap{},
-		cardsOnTable: goodMap{},
-		cardsInPack:  goodMap{},
+		soldGoods:    GoodMap{},
+		cardsOnTable: GoodMap{},
+		cardsInPack:  GoodMap{},
 	}
 
 	game.roundEnded = func() bool {

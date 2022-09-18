@@ -4,7 +4,7 @@ type (
 	Amount      uint8
 	GoodType    uint8
 	Score       uint8
-	goodMap     map[GoodType]Amount
+	GoodMap     map[GoodType]Amount
 	JaipurError string
 	Name        string
 )

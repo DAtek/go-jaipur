@@ -12,7 +12,7 @@ const (
 )
 
 type State struct {
-	name    StateName
-	variant Variant
-	transit func() StateName
+	Name    StateName
+	Variant Variant
+	Transit func() StateName
 }

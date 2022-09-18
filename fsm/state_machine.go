@@ -1,27 +1,27 @@
 package fsm
 
 type FSM struct {
-	states []State
+	States []*State
 }
 
 func (fsm *FSM) Run() StateName {
 	var currentState *State
-	for _, state := range fsm.states {
-		if state.variant == VariantStart {
-			currentState = &state
+	for _, state := range fsm.States {
+		if state.Variant == VariantStart {
+			currentState = state
 			break
 		}
 	}
 
-	for currentState.variant != VariantFinal {
-		nextStateName := currentState.transit()
-		for _, state := range fsm.states {
-			if state.name == nextStateName {
-				currentState = &state
+	for currentState.Variant != VariantFinal {
+		nextStateName := currentState.Transit()
+		for _, state := range fsm.States {
+			if state.Name == nextStateName {
+				currentState = state
 				break
 			}
 		}
 	}
 
-	return currentState.name
+	return currentState.Name
 }

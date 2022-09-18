@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (game *game) moveCardsFromPackToTable(amount Amount) {
+func (game *Game) moveCardsFromPackToTable(amount Amount) {
 	allCards := game.getAllCardsFromPack()
 
 	if Amount(len(allCards)) < amount {
@@ -22,7 +22,7 @@ func (game *game) moveCardsFromPackToTable(amount Amount) {
 	}
 }
 
-func (game *game) take5RandomCards(player *player) {
+func (game *Game) take5RandomCards(player *player) {
 	allCards := game.getAllCardsFromPack()
 
 	for i := Amount(0); i < 5; i++ {
@@ -43,7 +43,7 @@ func (game *game) take5RandomCards(player *player) {
 
 }
 
-func (game *game) getAllCardsFromPack() []GoodType {
+func (game *Game) getAllCardsFromPack() []GoodType {
 	allCards := []GoodType{}
 	for key, value := range game.cardsInPack {
 		for i := Amount(0); i < value; i++ {
@@ -53,7 +53,7 @@ func (game *game) getAllCardsFromPack() []GoodType {
 	return allCards
 }
 
-func (game *game) changeCurrentPlayer() {
+func (game *Game) changeCurrentPlayer() {
 	switch game.currentPlayer.name {
 	case game.player1.name:
 		game.currentPlayer = game.player2

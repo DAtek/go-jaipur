@@ -9,16 +9,16 @@ import (
 func TestTakeCard(t *testing.T) {
 	t.Run("Player has the choosen card", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{GoodDiamond: Amount(1)}
+		game.player1.cards = GoodMap{GoodDiamond: Amount(1)}
 
 		game.TakeCard(GoodDiamond)
 
-		assert.Equal(t, goodMap{GoodDiamond: Amount(2)}, game.player1.cards)
+		assert.Equal(t, GoodMap{GoodDiamond: Amount(2)}, game.player1.cards)
 	})
 
 	t.Run("Current player changes", func(t *testing.T) {
 		game := newGame()
-		game.player2.cards = goodMap{GoodDiamond: Amount(1)}
+		game.player2.cards = GoodMap{GoodDiamond: Amount(1)}
 		game.currentPlayer = game.player2
 
 		game.TakeCard(GoodDiamond)
@@ -28,7 +28,7 @@ func TestTakeCard(t *testing.T) {
 
 	t.Run("Player takes all camels", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{GoodCamel: Amount(5)}
+		game.cardsOnTable = GoodMap{GoodCamel: Amount(5)}
 
 		game.TakeCard(GoodCamel)
 
@@ -37,7 +37,7 @@ func TestTakeCard(t *testing.T) {
 
 	t.Run("Cards on table won't contain the picked card", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{GoodGold: Amount(1)}
+		game.cardsOnTable = GoodMap{GoodGold: Amount(1)}
 
 		game.TakeCard(GoodGold)
 
@@ -46,8 +46,8 @@ func TestTakeCard(t *testing.T) {
 
 	t.Run("The same amount of cards will be moved from the pack to the table", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{GoodDiamond: Amount(3)}
-		game.cardsInPack = goodMap{GoodSpice: Amount(5)}
+		game.cardsOnTable = GoodMap{GoodDiamond: Amount(3)}
+		game.cardsInPack = GoodMap{GoodSpice: Amount(5)}
 
 		game.TakeCard(GoodDiamond)
 
@@ -55,7 +55,7 @@ func TestTakeCard(t *testing.T) {
 		assert.Equal(t, Amount(4), game.cardsInPack[GoodSpice])
 	})
 
-	cardsOnTableScenarios := []goodMap{
+	cardsOnTableScenarios := []GoodMap{
 		{},
 		{GoodDiamond: 0},
 	}
@@ -73,8 +73,8 @@ func TestTakeCard(t *testing.T) {
 
 	t.Run("There is no enough cards in pack", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{GoodDiamond: Amount(5)}
-		game.cardsInPack = goodMap{}
+		game.cardsOnTable = GoodMap{GoodDiamond: Amount(5)}
+		game.cardsInPack = GoodMap{}
 
 		game.TakeCard(GoodDiamond)
 
@@ -106,7 +106,7 @@ func TestTakeCard(t *testing.T) {
 
 	t.Run("Error if player has too many cards", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{GoodDiamond: 7}
+		game.player1.cards = GoodMap{GoodDiamond: 7}
 
 		error := game.TakeCard(GoodCloth)
 

@@ -7,7 +7,7 @@ import (
 )
 
 func TestRoundEnded(t *testing.T) {
-	tokenDepletedScenarios := []goodMap{
+	tokenDepletedScenarios := []GoodMap{
 		{
 			GoodDiamond: 5,
 			GoodGold:    5,
@@ -31,7 +31,7 @@ func TestRoundEnded(t *testing.T) {
 
 	t.Run("Round ended when there are less than 5 cards on table", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{}
+		game.cardsOnTable = GoodMap{}
 
 		assert.Equal(t, true, roundEnded(game))
 	})

@@ -9,14 +9,14 @@ import (
 func TestExchangeGoods(t *testing.T) {
 	t.Run("Player has the wanted cards", func(t *testing.T) {
 		game := newGame()
-		game.currentPlayer.cards = goodMap{
+		game.currentPlayer.cards = GoodMap{
 			GoodCloth:   Amount(2),
 			GoodLeather: Amount(1),
 		}
 
 		error := game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.Nil(t, error)
@@ -28,8 +28,8 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 
 		game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.Equal(t, Amount(0), game.player1.cards[GoodCloth])
@@ -40,8 +40,8 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 
 		game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.Equal(t, Amount(0), game.cardsOnTable[GoodDiamond])
@@ -52,8 +52,8 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 
 		game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.Equal(t, Amount(2), game.cardsOnTable[GoodCloth])
@@ -64,8 +64,8 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 
 		game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.Equal(t, game.player2.name, game.currentPlayer.name)
@@ -73,21 +73,21 @@ func TestExchangeGoods(t *testing.T) {
 
 	t.Run("Error if player doesn't have proper cards", func(t *testing.T) {
 		game := newGame()
-		game.player1.cards = goodMap{}
-		game.cardsOnTable = goodMap{GoodCloth: 2}
+		game.player1.cards = GoodMap{}
+		game.cardsOnTable = GoodMap{GoodCloth: 2}
 
-		error := game.ExchangeGoods(goodMap{GoodCloth: 2}, goodMap{GoodDiamond: 2})
+		error := game.ExchangeGoods(GoodMap{GoodCloth: 2}, GoodMap{GoodDiamond: 2})
 
 		assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
 	})
 
 	t.Run("Error if there are not enough cards on the table", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{}
+		game.cardsOnTable = GoodMap{}
 
 		error := game.ExchangeGoods(
-			goodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			goodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
+			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
 		)
 
 		assert.EqualError(t, error, NotEnoughCardsOnTableError.Error())
@@ -95,10 +95,10 @@ func TestExchangeGoods(t *testing.T) {
 
 	t.Run("Error if player wants to exchange different amounts", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = goodMap{GoodCloth: 3}
-		game.currentPlayer.cards = goodMap{GoodDiamond: 2}
+		game.cardsOnTable = GoodMap{GoodCloth: 3}
+		game.currentPlayer.cards = GoodMap{GoodDiamond: 2}
 
-		error := game.ExchangeGoods(goodMap{GoodCloth: 3}, goodMap{GoodDiamond: 2})
+		error := game.ExchangeGoods(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
 
 		assert.EqualError(t, error, GoodsAmountsMismatchError.Error())
 	})
@@ -107,7 +107,7 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 		game.roundEnded = func() bool { return true }
 
-		error := game.ExchangeGoods(goodMap{GoodCloth: 3}, goodMap{GoodDiamond: 2})
+		error := game.ExchangeGoods(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
 
 		assert.EqualError(t, error, RoundEndedError.Error())
 	})
@@ -116,7 +116,7 @@ func TestExchangeGoods(t *testing.T) {
 		game := newGame()
 		game.gameEnded = func() bool { return true }
 
-		error := game.ExchangeGoods(goodMap{GoodCloth: 3}, goodMap{GoodDiamond: 2})
+		error := game.ExchangeGoods(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
 
 		assert.EqualError(t, error, GameEndedError.Error())
 	})

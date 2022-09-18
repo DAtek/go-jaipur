@@ -1,9 +1,9 @@
 package core
 
-func (game *game) GameEnded() bool {
+func (game *Game) GameEnded() bool {
 	return game.gameEnded()
 }
 
-func gameEnded(game *game) bool {
+func gameEnded(game *Game) bool {
 	return game.player1.sealsOfExcellence == 2 || game.player2.sealsOfExcellence == 2
 }
