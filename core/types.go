@@ -12,3 +12,11 @@ type (
 func (e JaipurError) Error() string {
 	return string(e)
 }
+
+func (goodMap GoodMap) Copy() GoodMap {
+	newMap := GoodMap{}
+	for k, v := range goodMap {
+		newMap[k] = v
+	}
+	return newMap
+}

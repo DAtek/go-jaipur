@@ -16,13 +16,11 @@ func askForNames(app *App) fsm.StateName {
 	app.game, e = core.NewGame(player1, player2)
 
 	switch e {
-	case nil:
-		return playerTurn.Name
 	case core.SameNamesError:
 		fmt.Fprintf(app.writer, "\nError: %s\n\n", core.SameNamesError.Error())
 		return gameStart.Name
 	default:
-		fmt.Fprintln(app.writer, "Some unexpected error happened.")
-		return gameStart.Name
+		fmt.Fprintln(app.writer)
+		return playerTurn.Name
 	}
 }

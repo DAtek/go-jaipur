@@ -5,6 +5,7 @@ type IGame interface {
 	CurrentPlayerCards() GoodMap
 	CardsOnTable() GoodMap
 	TakeCard(card GoodType) error
+	RoundEnded() bool
 }
 
 type Game struct {
@@ -20,19 +21,13 @@ type Game struct {
 }
 
 func (game *Game) CurrentPlayerCards() GoodMap {
-	cards := GoodMap{}
-	for k, v := range game.currentPlayer.cards {
-		cards[k] = v
-	}
+	cards := game.currentPlayer.cards.Copy()
+	cards[GoodCamel] = game.currentPlayer.herdSize
 	return cards
 }
 
 func (game *Game) CardsOnTable() GoodMap {
-	cards := GoodMap{}
-	for k, v := range game.cardsOnTable {
-		cards[k] = v
-	}
-	return cards
+	return game.cardsOnTable.Copy()
 }
 
 func (game *Game) CurrentPlayerName() Name {

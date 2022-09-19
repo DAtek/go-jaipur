@@ -31,7 +31,7 @@ func TestRoundEnded(t *testing.T) {
 
 	t.Run("Round ended when there are less than 5 cards on table", func(t *testing.T) {
 		game := newGame()
-		game.cardsOnTable = GoodMap{}
+		game.cardsOnTable = GoodMap{GoodCloth: 4}
 
 		assert.Equal(t, true, roundEnded(game))
 	})

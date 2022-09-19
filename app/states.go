@@ -18,6 +18,6 @@ var roundEnded = fsm.State{
 }
 
 var gameEnded = fsm.State{
-	Name:    "GameEnded",
+	Name:    "Game ended",
 	Variant: fsm.VariantFinal,
 }

@@ -14,12 +14,18 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 		writer: writer,
 	}
 
+	playerCommands := &playerCommandCollection{}
+
 	gameStart.Transit = func() fsm.StateName {
 		return askForNames(app)
 	}
 
 	playerTurn.Transit = func() fsm.StateName {
-		return doPlayerAction(app)
+		return doPlayerAction(app, playerCommands)
+	}
+
+	playerCommands.TakeCard = func() fsm.StateName {
+		return takeCard(app)
 	}
 
 	return app

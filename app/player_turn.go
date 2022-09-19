@@ -3,9 +3,10 @@ package app
 import (
 	"fmt"
 	"jaipur/fsm"
+	"strings"
 )
 
-func doPlayerAction(app *App) fsm.StateName {
+func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateName {
 	fmt.Fprintln(app.writer, string(app.game.CurrentPlayerName())+", it's your turn")
 	playerCards := formatGoodMap(app.game.CurrentPlayerCards())
 	cardsOnTable := formatGoodMap(app.game.CardsOnTable())
@@ -15,29 +16,17 @@ func doPlayerAction(app *App) fsm.StateName {
 	fmt.Fprintln(app.writer, "Cards on table: "+cardsOnTable)
 
 	action := input(app.reader, app.writer, "Pick an action - (E)xchnge cards | (S)ell cards | (T)ake a card: ")
+	action = strings.ToUpper(action)
 
 	switch action {
 	case "T":
-		return takeCard(app)
+		return playerCommand.TakeCard()
 	case "E":
-		return exchangeCards(app)
+		return playerCommand.ExchangeCards()
 	case "S":
-		return sellCards(app)
+		return playerCommand.SellCards()
 	default:
-		fmt.Fprint(app.writer, "Wrong action.\n")
+		fmt.Fprint(app.writer, "Wrong action.\n\n")
 		return playerTurn.Name
 	}
-
-}
-
-func takeCard(app *App) fsm.StateName {
-	return ""
-}
-
-func exchangeCards(app *App) fsm.StateName {
-	return ""
-}
-
-func sellCards(app *App) fsm.StateName {
-	return ""
 }
