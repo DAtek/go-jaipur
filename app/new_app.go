@@ -28,5 +28,9 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 		return takeCard(app)
 	}
 
+	playerCommands.SellCards = func() fsm.StateName {
+		return sellGoods(app)
+	}
+
 	return app
 }

@@ -9,6 +9,7 @@ import (
 type mockGame struct {
 	currentPlayerName  core.Name
 	takeCard           func(card core.GoodType) error
+	sellGoods          func(card core.GoodType) error
 	currentPlayerCards core.GoodMap
 	cardsOnTable       core.GoodMap
 	roundEnded         bool
@@ -41,6 +42,10 @@ func (game *mockGame) RoundEnded() bool {
 	return game.roundEnded
 }
 
+func (game *mockGame) SellGoods(good core.GoodType) error {
+	return game.sellGoods(good)
+}
+
 func newMockApp() *mockApp {
 	reader := &bytes.Buffer{}
 	writer := &bytes.Buffer{}
@@ -48,6 +53,7 @@ func newMockApp() *mockApp {
 		currentPlayerName: "Max",
 		roundEnded:        false,
 		takeCard:          func(card core.GoodType) error { return nil },
+		sellGoods:         func(card core.GoodType) error { return nil },
 	}
 
 	return &mockApp{

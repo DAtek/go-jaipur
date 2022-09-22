@@ -5,6 +5,7 @@ type IGame interface {
 	CurrentPlayerCards() GoodMap
 	CardsOnTable() GoodMap
 	TakeCard(card GoodType) error
+	SellGoods(card GoodType) error
 	RoundEnded() bool
 }
 
