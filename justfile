@@ -1,5 +1,5 @@
 coverfile := ".coverage"
-apps := "./core ./app"
+apps := "./core ./app ./fsm"
 
 
 test:

@@ -54,3 +54,18 @@ func TestCurrentPlayerName(t *testing.T) {
 
 	assert.Equal(t, game.currentPlayer.name, name)
 }
+
+func TestScoreMap(t *testing.T) {
+	game := newGame()
+	game.player1.score = 24
+	game.player2.score = 42
+
+	scores := game.PlayerScores()
+
+	wanted := ScoreMap{
+		game.player1.name: game.player1.score,
+		game.player2.name: game.player2.score,
+	}
+
+	assert.Equal(t, wanted, scores)
+}

@@ -7,6 +7,21 @@ import (
 )
 
 func TestNewGame(t *testing.T) {
+	playerNames := [][]Name{
+		{"", "a"},
+		{"a", ""},
+	}
+	for _, s := range playerNames {
+		t.Run("Players can't have empty name", func(t *testing.T) {
+			player1 := Name(s[0])
+			player2 := Name(s[1])
+
+			_, err := NewGame(player1, player2)
+
+			assert.EqualError(t, EmptyNameError, err.Error())
+		})
+	}
+
 	t.Run("Players have correct name", func(t *testing.T) {
 		player1 := Name("a")
 		player2 := Name("b")
@@ -76,7 +91,7 @@ func TestNewGame(t *testing.T) {
 	t.Run("Can't create game with same player names", func(t *testing.T) {
 		_, err := NewGame("a", "a")
 
-		assert.EqualError(t, err, SameNamesError.Error())
+		assert.Error(t, err)
 	})
 
 	t.Run("Round ended method is working", func(t *testing.T) {
@@ -89,5 +104,13 @@ func TestNewGame(t *testing.T) {
 		game, _ := NewGame("a", "b")
 
 		assert.False(t, game.GameEnded())
+	})
+
+	t.Run("Round winner method is working", func(t *testing.T) {
+		game, _ := NewGame("a", "b")
+
+		_, err := game.RoundWinner()
+
+		assert.Error(t, err)
 	})
 }

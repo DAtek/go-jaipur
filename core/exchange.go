@@ -3,11 +3,11 @@ package core
 const GoodsAmountsMismatchError = JaipurError("Goods amounts mismatch")
 
 func (game *Game) Exchange(buy, sell GoodMap) error {
-	if game.gameEnded() {
+	if (*game.gameEnded)() {
 		return GameEndedError
 	}
 
-	if game.roundEnded() {
+	if (*game.roundEnded)() {
 		return RoundEndedError
 	}
 

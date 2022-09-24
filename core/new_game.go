@@ -1,8 +1,15 @@
 package core
 
 const SameNamesError = JaipurError("Players have the same name")
+const EmptyNameError = JaipurError("Player got empty name")
+
+const EmptyName = ""
 
 func NewGame(player1Name, player2Name Name) (*Game, error) {
+	if player1Name == EmptyName || player2Name == EmptyName {
+		return nil, EmptyNameError
+	}
+
 	if player1Name == player2Name {
 		return nil, error(SameNamesError)
 	}
@@ -15,13 +22,20 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		cardsInPack:  GoodMap{},
 	}
 
-	game.roundEnded = func() bool {
+	roundEnded_ := func() bool {
 		return roundEnded(game)
 	}
+	game.roundEnded = &roundEnded_
 
-	game.gameEnded = func() bool {
+	gameEnded_ := func() bool {
 		return gameEnded(game)
 	}
+	game.gameEnded = &gameEnded_
+
+	roundWinner_ := func() (Name, error) {
+		return roundWinner(game)
+	}
+	game.roundWinner = &roundWinner_
 
 	game.currentPlayer = game.player1
 
@@ -39,8 +53,8 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		game.take5RandomCards(game.player2)
 	}
 
-	game.resetAfterRound = resetAfterRound
-	game.resetAfterRound()
+	game.resetAfterRound = &resetAfterRound
+	(*game.resetAfterRound)()
 
 	return game, nil
 }

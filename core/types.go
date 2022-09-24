@@ -7,6 +7,7 @@ type (
 	GoodMap     map[GoodType]Amount
 	JaipurError string
 	Name        string
+	ScoreMap    map[Name]Score
 )
 
 func (e JaipurError) Error() string {

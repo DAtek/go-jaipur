@@ -15,7 +15,7 @@ func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateN
 	fmt.Fprintln(app.writer, "Your cards: "+playerCards)
 	fmt.Fprintln(app.writer, "Cards on table: "+cardsOnTable+"\n")
 
-	action := input(app.reader, app.writer, "Pick an action - (E)xchnge | (S)ell | (B)uy: ")
+	action := input(app.reader, app.writer, "Pick an action - (E)xchange | (S)ell | (B)uy: ")
 	action = strings.ToUpper(action)
 
 	switch action {

@@ -17,25 +17,30 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 
 	playerCommands := &playerCommandCollection{}
 
-	gameStart.Transit = func() fsm.StateName {
+	startTransition := func() fsm.StateName {
 		return askForNames(app)
 	}
+	gameStart.Transit = &startTransition
 
-	playerTurn.Transit = func() fsm.StateName {
+	playerTurnTransition := func() fsm.StateName {
 		return doPlayerAction(app, playerCommands)
 	}
+	playerTurn.Transit = &playerTurnTransition
 
-	playerCommands.Buy = func() fsm.StateName {
+	playerBuyTransition := func() fsm.StateName {
 		return buy(app)
 	}
+	playerCommands.Buy = playerBuyTransition
 
-	playerCommands.Sell = func() fsm.StateName {
+	playerSellTransition := func() fsm.StateName {
 		return sell(app)
 	}
+	playerCommands.Sell = playerSellTransition
 
-	playerCommands.Exchange = func() fsm.StateName {
+	playerExchangeTransition := func() fsm.StateName {
 		return exchange(app, parseExchangeInput)
 	}
+	playerCommands.Exchange = playerExchangeTransition
 
 	return app
 }

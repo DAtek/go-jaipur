@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBuyGood(t *testing.T) {
+func TestBuy(t *testing.T) {
 	t.Run("Player has the choosen card", func(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodDiamond: Amount(1)}
@@ -88,7 +88,7 @@ func TestBuyGood(t *testing.T) {
 
 	t.Run("Error if round ended", func(t *testing.T) {
 		game := newGame()
-		game.roundEnded = func() bool { return true }
+		*game.roundEnded = func() bool { return true }
 
 		error := game.Buy(GoodCloth)
 
@@ -97,7 +97,7 @@ func TestBuyGood(t *testing.T) {
 
 	t.Run("Error if game ended", func(t *testing.T) {
 		game := newGame()
-		game.gameEnded = func() bool { return true }
+		*game.gameEnded = func() bool { return true }
 
 		error := game.Buy(GoodCloth)
 

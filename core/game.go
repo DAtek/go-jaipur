@@ -8,6 +8,10 @@ type IGame interface {
 	Sell(card GoodType) error
 	Exchange(buy, sell GoodMap) error
 	RoundEnded() bool
+	GameEnded() bool
+	RoundWinner() (Name, error)
+	PlayerScores() ScoreMap
+	FinishRound() error
 }
 
 type Game struct {
@@ -17,9 +21,10 @@ type Game struct {
 	cardsInPack     GoodMap
 	cardsOnTable    GoodMap
 	currentPlayer   *player
-	resetAfterRound func()
-	roundEnded      func() bool
-	gameEnded       func() bool
+	resetAfterRound *func()
+	roundEnded      *func() bool
+	gameEnded       *func() bool
+	roundWinner     *func() (Name, error)
 }
 
 func (game *Game) CurrentPlayerCards() GoodMap {
@@ -34,4 +39,11 @@ func (game *Game) CardsOnTable() GoodMap {
 
 func (game *Game) CurrentPlayerName() Name {
 	return game.currentPlayer.name
+}
+
+func (game *Game) PlayerScores() ScoreMap {
+	return ScoreMap{
+		game.player1.name: game.player1.score,
+		game.player2.name: game.player2.score,
+	}
 }

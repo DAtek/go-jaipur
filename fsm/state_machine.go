@@ -14,7 +14,7 @@ func (fsm *FSM) Run() StateName {
 	}
 
 	for currentState.Variant != VariantFinal {
-		nextStateName := currentState.Transit()
+		nextStateName := (*currentState.Transit)()
 		for _, state := range fsm.States {
 			if state.Name == nextStateName {
 				currentState = state

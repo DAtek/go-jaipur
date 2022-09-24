@@ -3,11 +3,11 @@ package core
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
 func (game *Game) Buy(card GoodType) error {
-	if game.gameEnded() {
+	if (*game.gameEnded)() {
 		return GameEndedError
 	}
 
-	if game.roundEnded() {
+	if (*game.roundEnded)() {
 		return RoundEndedError
 	}
 
