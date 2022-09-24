@@ -119,6 +119,7 @@ func TestParseExchangeInput(t *testing.T) {
 		{"1G", core.GoodMap{core.GoodGold: 1}, true},
 		{"1ca", core.GoodMap{core.GoodCamel: 1}, true},
 		{"3cl", core.GoodMap{core.GoodCloth: 3}, true},
+		{"1sp, 1si", core.GoodMap{core.GoodSilver: 1, core.GoodSpice: 1}, true},
 		{"asd", nil, false},
 		{"4asd", nil, false},
 	}

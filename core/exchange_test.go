@@ -10,26 +10,28 @@ func TestExchange(t *testing.T) {
 	t.Run("Player has the wanted cards", func(t *testing.T) {
 		game := newGame()
 		game.currentPlayer.cards = GoodMap{
-			GoodCloth:   Amount(2),
-			GoodLeather: Amount(1),
+			GoodCloth:   2,
+			GoodLeather: 1,
 		}
+		game.currentPlayer.herdSize = 1
+		game.cardsOnTable = GoodMap{GoodDiamond: 2, GoodGold: 2}
 
 		error := game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 2},
+			GoodMap{GoodCloth: 2, GoodLeather: 1, GoodCamel: 1},
 		)
 
 		assert.Nil(t, error)
 		assert.Equal(t, Amount(2), game.player1.cards[GoodDiamond])
-		assert.Equal(t, Amount(1), game.player1.cards[GoodGold])
+		assert.Equal(t, Amount(2), game.player1.cards[GoodGold])
 	})
 
 	t.Run("Player doesn't have the sold cards", func(t *testing.T) {
 		game := newGame()
 
 		game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 1},
 		)
 
 		assert.Equal(t, Amount(0), game.player1.cards[GoodCloth])
@@ -40,8 +42,8 @@ func TestExchange(t *testing.T) {
 		game := newGame()
 
 		game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 1},
 		)
 
 		assert.Equal(t, Amount(0), game.cardsOnTable[GoodDiamond])
@@ -52,8 +54,8 @@ func TestExchange(t *testing.T) {
 		game := newGame()
 
 		game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 1},
 		)
 
 		assert.Equal(t, Amount(2), game.cardsOnTable[GoodCloth])
@@ -64,8 +66,8 @@ func TestExchange(t *testing.T) {
 		game := newGame()
 
 		game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 1},
 		)
 
 		assert.Equal(t, game.player2.name, game.currentPlayer.name)
@@ -81,13 +83,24 @@ func TestExchange(t *testing.T) {
 		assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
 	})
 
+	t.Run("Error if player doesn't big enough herd", func(t *testing.T) {
+		game := newGame()
+		game.player1.herdSize = 1
+		game.player1.cards = GoodMap{GoodCloth: 1}
+		game.cardsOnTable = GoodMap{GoodDiamond: 3}
+
+		error := game.Exchange(GoodMap{GoodDiamond: 3}, GoodMap{GoodCloth: 1, GoodCamel: 2})
+
+		assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
+	})
+
 	t.Run("Error if there are not enough cards on the table", func(t *testing.T) {
 		game := newGame()
 		game.cardsOnTable = GoodMap{}
 
 		error := game.Exchange(
-			GoodMap{GoodDiamond: Amount(2), GoodGold: Amount(1)},
-			GoodMap{GoodCloth: Amount(2), GoodLeather: Amount(1)},
+			GoodMap{GoodDiamond: 2, GoodGold: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 1},
 		)
 
 		assert.EqualError(t, error, NotEnoughCardsOnTableError.Error())

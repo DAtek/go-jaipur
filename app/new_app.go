@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bufio"
 	"io"
 	"jaipur/fsm"
 )
@@ -10,7 +11,7 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 
 	app := &App{
 		fsm:    &driver,
-		reader: reader,
+		reader: bufio.NewReader(reader),
 		writer: writer,
 	}
 

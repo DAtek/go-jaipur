@@ -31,8 +31,10 @@ func TestAskForNames(t *testing.T) {
 		m.reader.Write([]byte(player2))
 
 		nextState := askForNames(m.app)
+		output := m.writer.String()
 
 		assert.Equal(t, playerTurn.Name, nextState)
+		assert.True(t, strings.Contains(output, clearScreenString))
 	})
 
 	t.Run("Asks for player names", func(t *testing.T) {

@@ -15,3 +15,6 @@ show-coverage:
 
 
 test-and-show: test-cover show-coverage
+
+run:
+    go run ./cmd

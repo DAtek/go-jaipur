@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bufio"
 	"bytes"
 	"jaipur/core"
 )
@@ -67,7 +68,7 @@ func newMockApp() *mockApp {
 		writer: writer,
 		game:   game,
 		app: &App{
-			reader: reader,
+			reader: bufio.NewReader(reader),
 			writer: writer,
 			game:   game,
 		},

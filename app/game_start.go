@@ -20,7 +20,7 @@ func askForNames(app *App) fsm.StateName {
 		fmt.Fprintf(app.writer, "\nError: %s\n\n", core.SameNamesError.Error())
 		return gameStart.Name
 	default:
-		fmt.Fprintln(app.writer)
+		fmt.Fprint(app.writer, clearScreenString)
 		return playerTurn.Name
 	}
 }

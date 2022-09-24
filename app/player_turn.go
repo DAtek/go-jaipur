@@ -8,14 +8,14 @@ import (
 
 func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateName {
 	fmt.Fprintln(app.writer, string(app.game.CurrentPlayerName())+", it's your turn")
-	playerCards := formatGoodMap(app.game.CurrentPlayerCards())
 	cardsOnTable := formatGoodMap(app.game.CardsOnTable())
+	playerCards := formatGoodMap(app.game.CurrentPlayerCards())
 
 	fmt.Fprintln(app.writer)
 	fmt.Fprintln(app.writer, "Your cards: "+playerCards)
-	fmt.Fprintln(app.writer, "Cards on table: "+cardsOnTable)
+	fmt.Fprintln(app.writer, "Cards on table: "+cardsOnTable+"\n")
 
-	action := input(app.reader, app.writer, "Pick an action - (E)xchnge cards | (S)ell cards | (T)ake a card: ")
+	action := input(app.reader, app.writer, "Pick an action - (E)xchnge | (S)ell | (B)uy: ")
 	action = strings.ToUpper(action)
 
 	switch action {

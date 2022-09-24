@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bufio"
 	"io"
 	"jaipur/core"
 	"jaipur/fsm"
@@ -9,6 +10,6 @@ import (
 type App struct {
 	game   core.IGame
 	fsm    *fsm.FSM
-	reader io.Reader
+	reader *bufio.Reader
 	writer io.Writer
 }

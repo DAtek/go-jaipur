@@ -5,6 +5,7 @@ import (
 	"jaipur/core"
 	"jaipur/fsm"
 	"strconv"
+	"strings"
 )
 
 type inputParser func(string) (core.GoodMap, bool)
@@ -12,7 +13,6 @@ type inputParser func(string) (core.GoodMap, bool)
 func exchange(app *App, parseInput inputParser) fsm.StateName {
 	buyString := input(app.reader, app.writer, "Buy goods eg. 2G, 1S: ")
 	buy, ok := parseInput(buyString)
-
 	if !ok {
 		fmt.Fprint(app.writer, "Invalid input for buying.\n\n")
 		return playerTurn.Name
@@ -38,14 +38,35 @@ func exchange(app *App, parseInput inputParser) fsm.StateName {
 }
 
 func parseExchangeInput(input string) (core.GoodMap, bool) {
-	amountInt, err := strconv.Atoi(input[0:1])
+	parts := strings.Split(input, ", ")
+	goodMap := core.GoodMap{}
+
+	for _, item := range parts {
+		goodType, amount, ok := parseGoodMapItem(item)
+
+		if !ok {
+			return nil, false
+		}
+
+		goodMap[goodType] = amount
+	}
+
+	return goodMap, true
+}
+
+func parseGoodMapItem(item string) (core.GoodType, core.Amount, bool) {
+	amountInt, err := strconv.Atoi(item[0:1])
+
 	if err != nil {
-		return nil, false
+		return 0, 0, false
 	}
+
 	amount := core.Amount(amountInt)
-	goodType, ok := goodAbbreviations.find(input[1:])
+	goodType, ok := goodAbbreviations.find(item[1:])
+
 	if !ok {
-		return nil, false
+		return 0, 0, false
 	}
-	return core.GoodMap{goodType: amount}, true
+
+	return goodType, amount, true
 }

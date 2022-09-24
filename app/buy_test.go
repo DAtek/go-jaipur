@@ -14,7 +14,7 @@ func TestBuy(t *testing.T) {
 
 		buy(mockApp.app)
 
-		assert.True(t, strings.Contains(mockApp.writer.String(), "Take a card: "))
+		assert.True(t, strings.Contains(mockApp.writer.String(), "Good: "))
 	})
 
 	t.Run("Transition clears screen on success", func(t *testing.T) {

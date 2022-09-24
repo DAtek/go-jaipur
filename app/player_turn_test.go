@@ -16,7 +16,7 @@ func TestDoPlayerAction(t *testing.T) {
 
 		doPlayerAction(mockApp.app, playerCommands)
 
-		assert.True(t, strings.Contains(mockApp.writer.String(), "Pick an action - (E)xchnge cards | (S)ell cards | (T)ake a card: "))
+		assert.True(t, strings.Contains(mockApp.writer.String(), "Pick an action - (E)xchnge | (S)ell | (B)uy"))
 	})
 
 	t.Run("Displays current player's name", func(t *testing.T) {
