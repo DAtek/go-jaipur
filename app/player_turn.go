@@ -19,12 +19,12 @@ func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateN
 	action = strings.ToUpper(action)
 
 	switch action {
-	case "T":
-		return playerCommand.TakeCard()
+	case "B":
+		return playerCommand.Buy()
 	case "E":
-		return playerCommand.ExchangeCards()
+		return playerCommand.Exchange()
 	case "S":
-		return playerCommand.SellCards()
+		return playerCommand.Sell()
 	default:
 		fmt.Fprint(app.writer, "Wrong action.\n\n")
 		return playerTurn.Name

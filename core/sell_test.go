@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSellGoods(t *testing.T) {
+func TestSell(t *testing.T) {
 	simpleScenarios := []struct {
 		name      string
 		goodsType GoodType
@@ -24,7 +24,7 @@ func TestSellGoods(t *testing.T) {
 			game := newGame()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
-			game.SellGoods(s.goodsType)
+			game.Sell(s.goodsType)
 
 			assert.Equal(t, s.score, game.player1.score)
 		})
@@ -48,7 +48,7 @@ func TestSellGoods(t *testing.T) {
 			game := newGame()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
-			game.SellGoods(s.goodsType)
+			game.Sell(s.goodsType)
 
 			assert.GreaterOrEqual(t, game.player1.score, s.minScore)
 			assert.LessOrEqual(t, game.player1.score, s.maxScore)
@@ -71,7 +71,7 @@ func TestSellGoods(t *testing.T) {
 			game := newGame()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
-			error := game.SellGoods(s.goodsType)
+			error := game.Sell(s.goodsType)
 
 			assert.EqualError(t, error, NotEnoughCardsToSellError.Error())
 		})
@@ -82,7 +82,7 @@ func TestSellGoods(t *testing.T) {
 		game.player1.cards = GoodMap{GoodSilver: 2}
 		game.player1.score = Score(1)
 
-		game.SellGoods(GoodSilver)
+		game.Sell(GoodSilver)
 
 		assert.Equal(t, Score(11), game.player1.score)
 	})
@@ -91,7 +91,7 @@ func TestSellGoods(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodCamel: 2}
 
-		error := game.SellGoods(GoodCamel)
+		error := game.Sell(GoodCamel)
 
 		assert.EqualError(t, error, SellingCamelForbiddenError.Error())
 	})
@@ -100,7 +100,7 @@ func TestSellGoods(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodDiamond: 2}
 
-		game.SellGoods(GoodDiamond)
+		game.Sell(GoodDiamond)
 
 		assert.Equal(t, game.player2.name, game.currentPlayer.name)
 	})
@@ -109,7 +109,7 @@ func TestSellGoods(t *testing.T) {
 		game := newGame()
 		game.roundEnded = func() bool { return true }
 
-		error := game.SellGoods(GoodCloth)
+		error := game.Sell(GoodCloth)
 
 		assert.EqualError(t, error, RoundEndedError.Error())
 	})
@@ -118,7 +118,7 @@ func TestSellGoods(t *testing.T) {
 		game := newGame()
 		game.gameEnded = func() bool { return true }
 
-		error := game.SellGoods(GoodCloth)
+		error := game.Sell(GoodCloth)
 
 		assert.EqualError(t, error, GameEndedError.Error())
 	})

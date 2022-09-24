@@ -5,7 +5,7 @@ import (
 	"jaipur/fsm"
 )
 
-func sellGoods(app *App) fsm.StateName {
+func sell(app *App) fsm.StateName {
 	goodAbbreviation := input(app.reader, app.writer, "Pick a good to sell: ")
 	good, ok := goodAbbreviations.find(goodAbbreviation)
 
@@ -14,7 +14,7 @@ func sellGoods(app *App) fsm.StateName {
 		return playerTurn.Name
 	}
 
-	err := app.game.SellGoods(good)
+	err := app.game.Sell(good)
 
 	if err != nil {
 		fmt.Fprint(app.writer, err.Error()+"\n\n")

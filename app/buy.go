@@ -5,7 +5,7 @@ import (
 	"jaipur/fsm"
 )
 
-func takeCard(app *App) fsm.StateName {
+func buy(app *App) fsm.StateName {
 	abbreviation := input(app.reader, app.writer, "Take a card: ")
 	goodType, ok := goodAbbreviations.find(abbreviation)
 	fmt.Fprintln(app.writer)
@@ -15,7 +15,7 @@ func takeCard(app *App) fsm.StateName {
 		return playerTurn.Name
 	}
 
-	err := app.game.TakeCard(goodType)
+	err := app.game.Buy(goodType)
 	if err != nil {
 		fmt.Fprintf(app.writer, "%s\n\n", err)
 		return playerTurn.Name

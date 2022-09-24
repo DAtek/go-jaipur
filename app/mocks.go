@@ -3,23 +3,24 @@ package app
 import (
 	"bytes"
 	"jaipur/core"
-	"jaipur/fsm"
 )
 
 type mockGame struct {
 	currentPlayerName  core.Name
-	takeCard           func(card core.GoodType) error
-	sellGoods          func(card core.GoodType) error
+	buy                func(card core.GoodType) error
+	sell               func(card core.GoodType) error
+	exchange           func(buy core.GoodMap, sell core.GoodMap) error
 	currentPlayerCards core.GoodMap
 	cardsOnTable       core.GoodMap
 	roundEnded         bool
 }
 
 type mockApp struct {
-	reader *bytes.Buffer
-	writer *bytes.Buffer
-	app    *App
-	game   *mockGame
+	reader              *bytes.Buffer
+	writer              *bytes.Buffer
+	app                 *App
+	game                *mockGame
+	exchangeInputParser inputParser
 }
 
 func (game *mockGame) CurrentPlayerName() core.Name {
@@ -34,16 +35,20 @@ func (game *mockGame) CardsOnTable() core.GoodMap {
 	return game.cardsOnTable
 }
 
-func (game *mockGame) TakeCard(card core.GoodType) error {
-	return game.takeCard(card)
+func (game *mockGame) Buy(card core.GoodType) error {
+	return game.buy(card)
 }
 
 func (game *mockGame) RoundEnded() bool {
 	return game.roundEnded
 }
 
-func (game *mockGame) SellGoods(good core.GoodType) error {
-	return game.sellGoods(good)
+func (game *mockGame) Sell(good core.GoodType) error {
+	return game.sell(good)
+}
+
+func (game *mockGame) Exchange(buy core.GoodMap, sell core.GoodMap) error {
+	return game.exchange(buy, sell)
 }
 
 func newMockApp() *mockApp {
@@ -52,8 +57,9 @@ func newMockApp() *mockApp {
 	game := &mockGame{
 		currentPlayerName: "Max",
 		roundEnded:        false,
-		takeCard:          func(card core.GoodType) error { return nil },
-		sellGoods:         func(card core.GoodType) error { return nil },
+		buy:               func(card core.GoodType) error { return nil },
+		sell:              func(card core.GoodType) error { return nil },
+		exchange:          func(buy, sell core.GoodMap) error { return nil },
 	}
 
 	return &mockApp{
@@ -65,13 +71,8 @@ func newMockApp() *mockApp {
 			writer: writer,
 			game:   game,
 		},
-	}
-}
-
-func newMockPlayerCommand() *playerCommandCollection {
-	return &playerCommandCollection{
-		TakeCard:      func() fsm.StateName { return "" },
-		ExchangeCards: func() fsm.StateName { return "" },
-		SellCards:     func() fsm.StateName { return "" },
+		exchangeInputParser: func(s string) (core.GoodMap, bool) {
+			return core.GoodMap{}, true
+		},
 	}
 }

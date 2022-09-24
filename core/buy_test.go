@@ -6,12 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTakeCard(t *testing.T) {
+func TestBuyGood(t *testing.T) {
 	t.Run("Player has the choosen card", func(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodDiamond: Amount(1)}
 
-		game.TakeCard(GoodDiamond)
+		game.Buy(GoodDiamond)
 
 		assert.Equal(t, GoodMap{GoodDiamond: Amount(2)}, game.player1.cards)
 	})
@@ -21,7 +21,7 @@ func TestTakeCard(t *testing.T) {
 		game.player2.cards = GoodMap{GoodDiamond: Amount(1)}
 		game.currentPlayer = game.player2
 
-		game.TakeCard(GoodDiamond)
+		game.Buy(GoodDiamond)
 
 		assert.Equal(t, game.player1, game.currentPlayer)
 	})
@@ -30,7 +30,7 @@ func TestTakeCard(t *testing.T) {
 		game := newGame()
 		game.cardsOnTable = GoodMap{GoodCamel: Amount(5)}
 
-		game.TakeCard(GoodCamel)
+		game.Buy(GoodCamel)
 
 		assert.Equal(t, Amount(5), game.player1.herdSize)
 	})
@@ -39,7 +39,7 @@ func TestTakeCard(t *testing.T) {
 		game := newGame()
 		game.cardsOnTable = GoodMap{GoodGold: Amount(1)}
 
-		game.TakeCard(GoodGold)
+		game.Buy(GoodGold)
 
 		assert.Equal(t, Amount(0), game.cardsOnTable[GoodGold])
 	})
@@ -49,7 +49,7 @@ func TestTakeCard(t *testing.T) {
 		game.cardsOnTable = GoodMap{GoodDiamond: Amount(3)}
 		game.cardsInPack = GoodMap{GoodSpice: Amount(5)}
 
-		game.TakeCard(GoodDiamond)
+		game.Buy(GoodDiamond)
 
 		assert.Equal(t, Amount(1), game.cardsOnTable[GoodSpice])
 		assert.Equal(t, Amount(4), game.cardsInPack[GoodSpice])
@@ -65,7 +65,7 @@ func TestTakeCard(t *testing.T) {
 			game := newGame()
 			game.cardsOnTable = s
 
-			e := game.TakeCard(GoodDiamond)
+			e := game.Buy(GoodDiamond)
 
 			assert.EqualError(t, e, NotEnoughCardsOnTableError.Error())
 		})
@@ -76,7 +76,7 @@ func TestTakeCard(t *testing.T) {
 		game.cardsOnTable = GoodMap{GoodDiamond: Amount(5)}
 		game.cardsInPack = GoodMap{}
 
-		game.TakeCard(GoodDiamond)
+		game.Buy(GoodDiamond)
 
 		cards := Amount(0)
 		for _, amount := range game.cardsOnTable {
@@ -90,7 +90,7 @@ func TestTakeCard(t *testing.T) {
 		game := newGame()
 		game.roundEnded = func() bool { return true }
 
-		error := game.TakeCard(GoodCloth)
+		error := game.Buy(GoodCloth)
 
 		assert.EqualError(t, error, RoundEndedError.Error())
 	})
@@ -99,7 +99,7 @@ func TestTakeCard(t *testing.T) {
 		game := newGame()
 		game.gameEnded = func() bool { return true }
 
-		error := game.TakeCard(GoodCloth)
+		error := game.Buy(GoodCloth)
 
 		assert.EqualError(t, error, GameEndedError.Error())
 	})
@@ -108,7 +108,7 @@ func TestTakeCard(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodDiamond: 7}
 
-		error := game.TakeCard(GoodCloth)
+		error := game.Buy(GoodCloth)
 
 		assert.EqualError(t, error, PlayerHasTooManyCardsError.Error())
 	})

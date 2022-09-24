@@ -2,7 +2,7 @@ package core
 
 const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
 
-func (game *Game) TakeCard(card GoodType) error {
+func (game *Game) Buy(card GoodType) error {
 	if game.gameEnded() {
 		return GameEndedError
 	}

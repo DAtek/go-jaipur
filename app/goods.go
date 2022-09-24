@@ -74,5 +74,5 @@ func (m goodAbbreviationMap) find(abbreviation string) (core.GoodType, bool) {
 		}
 	}
 
-	return core.GoodDiamond, false
+	return 0, false
 }

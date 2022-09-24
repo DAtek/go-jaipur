@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTakeCard(t *testing.T) {
+func TestBuy(t *testing.T) {
 	t.Run("Asks card for taking a card", func(t *testing.T) {
 		mockApp := newMockApp()
 
-		takeCard(mockApp.app)
+		buy(mockApp.app)
 
 		assert.True(t, strings.Contains(mockApp.writer.String(), "Take a card: "))
 	})
@@ -21,7 +21,7 @@ func TestTakeCard(t *testing.T) {
 		mockApp := newMockApp()
 		mockApp.reader.Write([]byte("D"))
 
-		takeCard(mockApp.app)
+		buy(mockApp.app)
 
 		assert.True(t, strings.Contains(mockApp.writer.String(), clearScreenString))
 	})
@@ -31,7 +31,7 @@ func TestTakeCard(t *testing.T) {
 		mockApp.game.roundEnded = true
 		mockApp.reader.Write([]byte("D"))
 
-		nextState := takeCard(mockApp.app)
+		nextState := buy(mockApp.app)
 
 		assert.Equal(t, roundEnded.Name, nextState)
 	})
@@ -40,13 +40,13 @@ func TestTakeCard(t *testing.T) {
 		mockApp := newMockApp()
 		mockApp.game.roundEnded = true
 		called := false
-		mockApp.game.takeCard = func(card core.GoodType) error {
+		mockApp.game.buy = func(card core.GoodType) error {
 			called = true
 			return nil
 		}
 		mockApp.reader.Write([]byte("D"))
 
-		takeCard(mockApp.app)
+		buy(mockApp.app)
 
 		assert.True(t, called)
 	})
@@ -54,13 +54,13 @@ func TestTakeCard(t *testing.T) {
 	t.Run("Transition prints error on wrong input", func(t *testing.T) {
 		mockApp := newMockApp()
 		called := false
-		mockApp.game.takeCard = func(card core.GoodType) error {
+		mockApp.game.buy = func(card core.GoodType) error {
 			called = true
 			return nil
 		}
 		mockApp.reader.Write([]byte("asdasdasd"))
 
-		nextState := takeCard(mockApp.app)
+		nextState := buy(mockApp.app)
 
 		assert.False(t, called)
 		assert.True(t, strings.Contains(mockApp.writer.String(), "Invalid input"))
@@ -70,13 +70,13 @@ func TestTakeCard(t *testing.T) {
 	t.Run("Transition prints game logic error", func(t *testing.T) {
 		mockApp := newMockApp()
 		called := false
-		mockApp.game.takeCard = func(card core.GoodType) error {
+		mockApp.game.buy = func(card core.GoodType) error {
 			called = true
 			return core.PlayerHasTooManyCardsError
 		}
 		mockApp.reader.Write([]byte("D"))
 
-		nextState := takeCard(mockApp.app)
+		nextState := buy(mockApp.app)
 
 		assert.True(t, called)
 		assert.True(t, strings.Contains(mockApp.writer.String(), core.PlayerHasTooManyCardsError.Error()))

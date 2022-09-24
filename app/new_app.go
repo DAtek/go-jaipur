@@ -24,12 +24,16 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 		return doPlayerAction(app, playerCommands)
 	}
 
-	playerCommands.TakeCard = func() fsm.StateName {
-		return takeCard(app)
+	playerCommands.Buy = func() fsm.StateName {
+		return buy(app)
 	}
 
-	playerCommands.SellCards = func() fsm.StateName {
-		return sellGoods(app)
+	playerCommands.Sell = func() fsm.StateName {
+		return sell(app)
+	}
+
+	playerCommands.Exchange = func() fsm.StateName {
+		return exchange(app, parseExchangeInput)
 	}
 
 	return app

@@ -4,8 +4,9 @@ type IGame interface {
 	CurrentPlayerName() Name
 	CurrentPlayerCards() GoodMap
 	CardsOnTable() GoodMap
-	TakeCard(card GoodType) error
-	SellGoods(card GoodType) error
+	Buy(card GoodType) error
+	Sell(card GoodType) error
+	Exchange(buy, sell GoodMap) error
 	RoundEnded() bool
 }
 

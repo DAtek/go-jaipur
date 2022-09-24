@@ -12,7 +12,7 @@ import (
 func TestDoPlayerAction(t *testing.T) {
 	t.Run("Asks for action", func(t *testing.T) {
 		mockApp := newMockApp()
-		playerCommands := newMockPlayerCommand()
+		playerCommands := &playerCommandCollection{}
 
 		doPlayerAction(mockApp.app, playerCommands)
 
@@ -21,7 +21,7 @@ func TestDoPlayerAction(t *testing.T) {
 
 	t.Run("Displays current player's name", func(t *testing.T) {
 		mockApp := newMockApp()
-		playerCommands := newMockPlayerCommand()
+		playerCommands := &playerCommandCollection{}
 
 		doPlayerAction(mockApp.app, playerCommands)
 		wantedString := string(mockApp.app.game.CurrentPlayerName()) + ", it's your turn"
@@ -31,7 +31,7 @@ func TestDoPlayerAction(t *testing.T) {
 
 	t.Run("Displays current player's cards", func(t *testing.T) {
 		mockApp := newMockApp()
-		playerCommands := newMockPlayerCommand()
+		playerCommands := &playerCommandCollection{}
 
 		doPlayerAction(mockApp.app, playerCommands)
 		wantedString := "Your cards: " + formatGoodMap(mockApp.app.game.CurrentPlayerCards())
@@ -41,7 +41,7 @@ func TestDoPlayerAction(t *testing.T) {
 
 	t.Run("Displays cards on table", func(t *testing.T) {
 		mockApp := newMockApp()
-		playerCommands := newMockPlayerCommand()
+		playerCommands := &playerCommandCollection{}
 
 		doPlayerAction(mockApp.app, playerCommands)
 		wantedString := "Cards on table: " + formatGoodMap(mockApp.app.game.CardsOnTable())
@@ -51,7 +51,7 @@ func TestDoPlayerAction(t *testing.T) {
 
 	t.Run("Prints warning on wrong command", func(t *testing.T) {
 		mockApp := newMockApp()
-		playerCommands := newMockPlayerCommand()
+		playerCommands := &playerCommandCollection{}
 		mockApp.reader.Write([]byte("wrong command"))
 
 		doPlayerAction(mockApp.app, playerCommands)
@@ -63,18 +63,18 @@ func TestDoPlayerAction(t *testing.T) {
 		key     string
 		command string
 	}{
-		{"T", "TakeCard"},
-		{"t", "TakeCard"},
-		{"E", "ExchangeCards"},
-		{"e", "ExchangeCards"},
-		{"S", "SellCards"},
-		{"s", "SellCards"},
+		{"B", "Buy"},
+		{"b", "Buy"},
+		{"E", "Exchange"},
+		{"e", "Exchange"},
+		{"S", "Sell"},
+		{"s", "Sell"},
 	}
 
 	for _, s := range playerChoiceScenarios {
 		t.Run("Executes the proper command", func(t *testing.T) {
 			mockApp := newMockApp()
-			playerCommands := newMockPlayerCommand()
+			playerCommands := &playerCommandCollection{}
 
 			called := false
 			nextState := fsm.StateName("next state")

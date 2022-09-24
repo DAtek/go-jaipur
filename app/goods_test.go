@@ -20,6 +20,10 @@ func TestFormatGoodMap(t *testing.T) {
 			goods:  core.GoodMap{core.GoodCloth: 1, core.GoodCamel: 3},
 			wanted: "(Ca)mel: 3, (Cl)oth: 1",
 		},
+		{
+			goods:  core.GoodMap{core.GoodCloth: 1, core.GoodCamel: 0},
+			wanted: "(Cl)oth: 1",
+		},
 	}
 
 	for _, s := range scenarios {
