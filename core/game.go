@@ -12,6 +12,7 @@ type IGame interface {
 	RoundWinner() (Name, error)
 	PlayerScores() ScoreMap
 	FinishRound() error
+	GameWinner() (Name, error)
 }
 
 type Game struct {
@@ -45,5 +46,18 @@ func (game *Game) PlayerScores() ScoreMap {
 	return ScoreMap{
 		game.player1.name: game.player1.score,
 		game.player2.name: game.player2.score,
+	}
+}
+
+const GameNotEndedError = JaipurError("Game not ended")
+
+func (game *Game) GameWinner() (Name, error) {
+	if !(*game.gameEnded)() {
+		return "", GameNotEndedError
+	}
+	if game.player1.sealsOfExcellence > game.player2.sealsOfExcellence {
+		return game.player1.name, nil
+	} else {
+		return game.player2.name, nil
 	}
 }

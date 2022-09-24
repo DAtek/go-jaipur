@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAskForNames(t *testing.T) {
+func TestStartGame(t *testing.T) {
 	t.Run("Returns original state when players have the same name", func(t *testing.T) {
 		m := newMockApp()
 		m.reader.Write([]byte("a"))
 		m.reader.Write([]byte("\n"))
 		m.reader.Write([]byte("a"))
 
-		nextState := askForNames(m.app)
+		nextState := startGame(m.app)
 		output := m.writer.String()
 
 		assert.Equal(t, gameStart.Name, nextState)
@@ -30,7 +30,7 @@ func TestAskForNames(t *testing.T) {
 		m.reader.Write([]byte("\n"))
 		m.reader.Write([]byte(player2))
 
-		nextState := askForNames(m.app)
+		nextState := startGame(m.app)
 		output := m.writer.String()
 
 		assert.Equal(t, playerTurn.Name, nextState)
@@ -40,7 +40,7 @@ func TestAskForNames(t *testing.T) {
 	t.Run("Asks for player names", func(t *testing.T) {
 		m := newMockApp()
 
-		askForNames(m.app)
+		startGame(m.app)
 
 		output := m.writer.String()
 

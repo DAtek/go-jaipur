@@ -31,7 +31,7 @@ func TestFinishRound(t *testing.T) {
 		assert.True(t, strings.Contains(output, string(susie)+"'s score: "+string(mockApp.game.playerScores[susie])))
 	})
 
-	t.Run("Prints promt to continue", func(t *testing.T) {
+	t.Run("Prompts to continue", func(t *testing.T) {
 		mockApp := newMockApp()
 
 		finishRound(mockApp.app)

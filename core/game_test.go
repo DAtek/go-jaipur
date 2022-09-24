@@ -69,3 +69,40 @@ func TestScoreMap(t *testing.T) {
 
 	assert.Equal(t, wanted, scores)
 }
+
+func TestGameWinner(t *testing.T) {
+	player1Name := Name("John")
+	player2Name := Name("Jane")
+	winnerScenarios := []struct {
+		player1Score Score
+		player2Score Score
+		winner       Name
+	}{
+		{2, 1, player1Name},
+		{0, 2, player2Name},
+	}
+	for _, s := range winnerScenarios {
+		t.Run("Returns winner", func(t *testing.T) {
+			game := newGame()
+			game.player1.name = player1Name
+			game.player2.name = player2Name
+			game.player1.sealsOfExcellence = s.player1Score
+			game.player2.sealsOfExcellence = s.player2Score
+			*game.gameEnded = func() bool { return true }
+
+			winner, err := game.GameWinner()
+
+			assert.Nil(t, err)
+			assert.Equal(t, s.winner, winner)
+		})
+	}
+
+	t.Run("Returns error if game not ended", func(t *testing.T) {
+		game := newGame()
+		*game.gameEnded = func() bool { return false }
+
+		_, err := game.GameWinner()
+
+		assert.EqualError(t, GameNotEndedError, err.Error())
+	})
+}

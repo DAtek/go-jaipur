@@ -18,6 +18,7 @@ type mockGame struct {
 	roundWinner        *func() (core.Name, error)
 	playerScores       core.ScoreMap
 	finishRound        func() error
+	gameWinner         *func() (core.Name, error)
 }
 
 type mockApp struct {
@@ -72,6 +73,10 @@ func (game *mockGame) FinishRound() error {
 	return game.finishRound()
 }
 
+func (game *mockGame) GameWinner() (core.Name, error) {
+	return (*game.gameWinner)()
+}
+
 func newMockApp() *mockApp {
 	reader := &bytes.Buffer{}
 	writer := &bytes.Buffer{}
@@ -83,10 +88,14 @@ func newMockApp() *mockApp {
 		exchange:          func(buy, sell core.GoodMap) error { return nil },
 	}
 
-	roundWinner_ := func() (core.Name, error) {
+	roundWinner := func() (core.Name, error) {
 		return "", nil
 	}
-	game.roundWinner = &roundWinner_
+	gameWinner := func() (core.Name, error) {
+		return "", nil
+	}
+	game.roundWinner = &roundWinner
+	game.gameWinner = &gameWinner
 	game.finishRound = func() error { return nil }
 
 	return &mockApp{

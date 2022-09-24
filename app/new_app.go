@@ -7,7 +7,7 @@ import (
 )
 
 func NewApp(reader io.Reader, writer io.Writer) *App {
-	driver := fsm.FSM{States: []*fsm.State{&gameStart, &playerTurn, &roundEnded, &gameEnded}}
+	driver := fsm.FSM{States: []*fsm.State{&gameStart, &playerTurn, &roundEnded, &gameEnded, &finalState}}
 
 	app := &App{
 		fsm:    &driver,
@@ -18,7 +18,7 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 	playerCommands := &playerCommandCollection{}
 
 	startTransition := func() fsm.StateName {
-		return askForNames(app)
+		return startGame(app)
 	}
 	gameStart.Transit = &startTransition
 
@@ -27,20 +27,30 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 	}
 	playerTurn.Transit = &playerTurnTransition
 
-	playerBuyTransition := func() fsm.StateName {
+	finishRoundTransition := func() fsm.StateName {
+		return finishRound(app)
+	}
+	roundEnded.Transit = &finishRoundTransition
+
+	endGameTransition := func() fsm.StateName {
+		return endGame(app)
+	}
+	gameEnded.Transit = &endGameTransition
+
+	playerBuy := func() fsm.StateName {
 		return buy(app)
 	}
-	playerCommands.Buy = playerBuyTransition
+	playerCommands.Buy = &playerBuy
 
-	playerSellTransition := func() fsm.StateName {
+	playerSell := func() fsm.StateName {
 		return sell(app)
 	}
-	playerCommands.Sell = playerSellTransition
+	playerCommands.Sell = &playerSell
 
-	playerExchangeTransition := func() fsm.StateName {
+	playerExchange := func() fsm.StateName {
 		return exchange(app, parseExchangeInput)
 	}
-	playerCommands.Exchange = playerExchangeTransition
+	playerCommands.Exchange = &playerExchange
 
 	return app
 }

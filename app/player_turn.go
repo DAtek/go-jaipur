@@ -20,11 +20,11 @@ func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateN
 
 	switch action {
 	case "B":
-		return playerCommand.Buy()
+		return (*playerCommand.Buy)()
 	case "E":
-		return playerCommand.Exchange()
+		return (*playerCommand.Exchange)()
 	case "S":
-		return playerCommand.Sell()
+		return (*playerCommand.Sell)()
 	default:
 		fmt.Fprint(app.writer, "Wrong action.\n\n")
 		return playerTurn.Name

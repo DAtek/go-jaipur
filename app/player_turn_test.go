@@ -84,7 +84,7 @@ func TestDoPlayerAction(t *testing.T) {
 			}
 			structValue := reflect.ValueOf(playerCommands).Elem()
 			structFieldValue := structValue.FieldByName(s.command)
-			structFieldValue.Set(reflect.ValueOf(command))
+			structFieldValue.Set(reflect.ValueOf(&command))
 
 			mockApp.reader.Write([]byte(s.key))
 

@@ -22,20 +22,20 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		cardsInPack:  GoodMap{},
 	}
 
-	roundEnded_ := func() bool {
+	roundEnded := func() bool {
 		return roundEnded(game)
 	}
-	game.roundEnded = &roundEnded_
+	game.roundEnded = &roundEnded
 
-	gameEnded_ := func() bool {
+	gameEnded := func() bool {
 		return gameEnded(game)
 	}
-	game.gameEnded = &gameEnded_
+	game.gameEnded = &gameEnded
 
-	roundWinner_ := func() (Name, error) {
+	roundWinner := func() (Name, error) {
 		return roundWinner(game)
 	}
-	game.roundWinner = &roundWinner_
+	game.roundWinner = &roundWinner
 
 	game.currentPlayer = game.player1
 

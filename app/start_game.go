@@ -6,7 +6,7 @@ import (
 	"jaipur/fsm"
 )
 
-func askForNames(app *App) fsm.StateName {
+func startGame(app *App) fsm.StateName {
 	name := input(app.reader, app.writer, "Enter player 1 name: ")
 	player1 := core.Name(name)
 	name = input(app.reader, app.writer, "Enter player 2 name: ")
