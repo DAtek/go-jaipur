@@ -7,7 +7,6 @@ import (
 
 func buy(app *App) fsm.StateName {
 	abbreviation := input(app.reader, app.writer, "Pick a good to buy: ")
-	fmt.Fprint(app.writer, "picked good: '"+abbreviation+"'")
 	goodType, ok := goodAbbreviations.find(abbreviation)
 
 	if !ok {

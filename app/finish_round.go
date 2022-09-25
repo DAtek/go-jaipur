@@ -10,7 +10,7 @@ func finishRound(app *App) fsm.StateName {
 	fmt.Fprint(app.writer, "Winner of the round: "+string(winner)+"\n")
 	playerScores := app.game.PlayerScores()
 	for name, score := range playerScores {
-		fmt.Fprint(app.writer, string(name)+"'s score: "+string(score)+"\n")
+		fmt.Fprintf(app.writer, "%s's score: %d\n", name, score)
 	}
 	input(app.reader, app.writer, "Press enter to continue")
 	err := app.game.FinishRound()

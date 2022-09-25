@@ -1,6 +1,7 @@
 package core
 
 const SellingCamelForbiddenError = JaipurError("Selling camels is forbidden")
+const GoodSoldOutError = JaipurError("This good is sold out")
 
 func (game *Game) Sell(goodType GoodType) error {
 	if game.gameEnded() {
@@ -28,16 +29,26 @@ func (game *Game) Sell(goodType GoodType) error {
 		}
 	}
 
+	soldGoods := game.soldGoods
+	actualIndex := soldGoods[goodType]
+	totalCoins := Amount(len(coins[goodType]))
+
+	if actualIndex == totalCoins {
+		return GoodSoldOutError
+	}
+
 	for i := Amount(0); i < amount; i++ {
-		soldGoods := game.soldGoods
-		actualIndex := soldGoods[goodType]
+		actualIndex = soldGoods[goodType]
+		if actualIndex == totalCoins {
+			return nil
+		}
 		score := coins[goodType][actualIndex]
 		soldGoods[goodType] = actualIndex + 1
 		game.currentPlayer.score += score
+		game.currentPlayer.cards[goodType]--
 	}
 
 	game.currentPlayer.score += getBonus(amount)
-	game.currentPlayer.cards[goodType] -= amount
 	game.changeCurrentPlayer()
 	return nil
 }

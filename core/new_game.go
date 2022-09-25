@@ -15,11 +15,9 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 	}
 
 	game := &Game{
-		player1:      &player{name: player1Name, sealsOfExcellence: 0},
-		player2:      &player{name: player2Name, sealsOfExcellence: 0},
-		soldGoods:    GoodMap{},
-		cardsOnTable: GoodMap{},
-		cardsInPack:  GoodMap{},
+		player1:     &player{name: player1Name, sealsOfExcellence: 0},
+		player2:     &player{name: player2Name, sealsOfExcellence: 0},
+		cardsInPack: GoodMap{},
 	}
 
 	game.roundEnded = func() bool { return roundEnded(game) }
@@ -32,8 +30,10 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		}
 		game.player1.resetAfterRound()
 		game.player2.resetAfterRound()
+		game.cardsOnTable = GoodMap{}
 		game.cardsOnTable[GoodCamel] = 3
 		game.cardsInPack[GoodCamel] -= 3
+		game.soldGoods = GoodMap{}
 
 		game.moveCardsFromPackToTable(2)
 		game.take5RandomCards(game.player1)

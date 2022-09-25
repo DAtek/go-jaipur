@@ -1,7 +1,5 @@
 package core
 
-const MaximalPlayerCards = Amount(7)
-
 func (game *Game) Buy(card GoodType) error {
 	if game.gameEnded() {
 		return GameEndedError
@@ -16,7 +14,7 @@ func (game *Game) Buy(card GoodType) error {
 		sumPlayerCards += amount
 	}
 
-	if sumPlayerCards == MaximalPlayerCards {
+	if sumPlayerCards == MaximumCardsInHand {
 		return PlayerHasTooManyCardsError
 	}
 

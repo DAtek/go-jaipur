@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"jaipur/core"
 	"strings"
 	"testing"
@@ -26,9 +27,10 @@ func TestFinishRound(t *testing.T) {
 		finishRound(mockApp.app)
 
 		output := mockApp.writer.String()
-
+		fmt.Printf("output: %s\n", output)
 		assert.True(t, strings.Contains(output, "Winner of the round: "+string(winner)))
-		assert.True(t, strings.Contains(output, string(susie)+"'s score: "+string(mockApp.game.playerScores[susie])))
+		assert.True(t, strings.Contains(output, fmt.Sprintf("%s's score: %d", susie, mockApp.game.playerScores[susie])))
+		assert.True(t, strings.Contains(output, fmt.Sprintf("%s's score: %d", johann, mockApp.game.playerScores[johann])))
 	})
 
 	t.Run("Prompts to continue", func(t *testing.T) {

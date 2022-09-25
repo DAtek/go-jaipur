@@ -7,14 +7,24 @@ func (game *Game) Exchange(buy, sell GoodMap) error {
 		return err
 	}
 
-	for key, value := range sell {
-		game.cardsOnTable[key] += value
-		game.currentPlayer.cards[key] -= value
+	for card, amount := range sell {
+		game.cardsOnTable[card] += amount
+		switch card {
+		case GoodCamel:
+			game.currentPlayer.herdSize -= amount
+		default:
+			game.currentPlayer.cards[card] -= amount
+		}
 	}
 
-	for key, value := range buy {
-		game.currentPlayer.cards[key] += value
-		game.cardsOnTable[key] -= value
+	for card, amount := range buy {
+		switch card {
+		case GoodCamel:
+			game.currentPlayer.herdSize += amount
+		default:
+			game.currentPlayer.cards[card] += amount
+		}
+		game.cardsOnTable[card] -= amount
 	}
 
 	game.changeCurrentPlayer()
@@ -50,10 +60,6 @@ func (game *Game) validateExchangeInput(buy, sell GoodMap) error {
 		wantedGoodAmount += amount
 	}
 
-	if wantedGoodAmount > MaximalPlayerCards {
-		return PlayerHasTooManyCardsError
-	}
-
 	for good, amount := range sell {
 		amountExchangeSum -= amount
 		switch good {
@@ -62,10 +68,15 @@ func (game *Game) validateExchangeInput(buy, sell GoodMap) error {
 				return NotEnoughCardsToSellError
 			}
 		default:
+			wantedGoodAmount -= amount
 			if game.currentPlayer.cards[good] < amount {
 				return NotEnoughCardsToSellError
 			}
 		}
+	}
+
+	if wantedGoodAmount > MaximumCardsInHand {
+		return PlayerHasTooManyCardsError
 	}
 
 	if amountExchangeSum != 0 {

@@ -77,6 +77,16 @@ func TestSell(t *testing.T) {
 		})
 	}
 
+	t.Run("Player sells partial amount", func(t *testing.T) {
+		game := newGame()
+		game.player1.cards = GoodMap{GoodSilver: 3}
+		game.soldGoods = GoodMap{GoodSilver: 3}
+
+		game.Sell(GoodSilver)
+
+		assert.Equal(t, Score(10), game.player1.score)
+	})
+
 	t.Run("New score adds up to player's score", func(t *testing.T) {
 		game := newGame()
 		game.player1.cards = GoodMap{GoodSilver: 2}
@@ -121,5 +131,15 @@ func TestSell(t *testing.T) {
 		error := game.Sell(GoodCloth)
 
 		assert.EqualError(t, error, GameEndedError.Error())
+	})
+
+	t.Run("Error if all the goods are sold", func(t *testing.T) {
+		game := newGame()
+		game.currentPlayer.cards = GoodMap{GoodCloth: 1}
+		game.soldGoods = GoodMap{GoodCloth: Amount(len(coins[GoodCloth]))}
+
+		error := game.Sell(GoodCloth)
+
+		assert.EqualError(t, GoodSoldOutError, error.Error())
 	})
 }

@@ -10,35 +10,38 @@ func TestExchange(t *testing.T) {
 	t.Run("Player has the wanted cards", func(t *testing.T) {
 		game := newGame()
 		game.currentPlayer.cards = GoodMap{
-			GoodCloth:   2,
-			GoodLeather: 1,
+			GoodCloth:   4,
+			GoodLeather: 3,
 		}
 		game.currentPlayer.herdSize = 1
-		game.cardsOnTable = GoodMap{GoodDiamond: 2, GoodGold: 2}
+		game.cardsOnTable = GoodMap{GoodDiamond: 2, GoodGold: 2, GoodCamel: 1}
 
 		error := game.Exchange(
-			GoodMap{GoodDiamond: 2, GoodGold: 2},
-			GoodMap{GoodCloth: 2, GoodLeather: 1, GoodCamel: 1},
+			GoodMap{GoodDiamond: 2, GoodGold: 2, GoodCamel: 1},
+			GoodMap{GoodCloth: 2, GoodLeather: 3},
 		)
 
 		assert.Nil(t, error)
 		assert.Equal(t, Amount(2), game.player1.cards[GoodDiamond])
 		assert.Equal(t, Amount(2), game.player1.cards[GoodGold])
+		assert.Equal(t, Amount(2), game.player1.herdSize)
 	})
 
 	t.Run("Player doesn't have the sold cards", func(t *testing.T) {
 		game := newGame()
+		game.player1.herdSize = 1
 
 		game.Exchange(
 			GoodMap{GoodDiamond: 2, GoodGold: 1},
-			GoodMap{GoodCloth: 2, GoodLeather: 1},
+			GoodMap{GoodCloth: 1, GoodLeather: 1, GoodCamel: 1},
 		)
 
-		assert.Equal(t, Amount(0), game.player1.cards[GoodCloth])
+		assert.Equal(t, Amount(1), game.player1.cards[GoodCloth])
 		assert.Equal(t, Amount(0), game.player1.cards[GoodLeather])
+		assert.Equal(t, Amount(0), game.player1.herdSize)
 	})
 
-	t.Run("Table doesn't have the picked cards", func(t *testing.T) {
+	t.Run("The picked cards aren't on the table", func(t *testing.T) {
 		game := newGame()
 
 		game.Exchange(

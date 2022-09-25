@@ -1,5 +1,7 @@
 package core
 
+const MaximumCardsInHand = Amount(7)
+
 type player struct {
 	name              Name
 	score             Score
