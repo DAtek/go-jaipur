@@ -3,15 +3,15 @@ package core
 const RoundNotEndedError = JaipurError("Round not ended")
 
 func (game *Game) FinishRound() error {
-	if (*game.gameEnded)() {
+	if game.gameEnded() {
 		return GameEndedError
 	}
 
-	if !(*game.roundEnded)() {
+	if !game.roundEnded() {
 		return RoundNotEndedError
 	}
 
-	winner, _ := (*game.roundWinner)()
+	winner, _ := (game.roundWinner)()
 
 	for _, p := range []*player{game.player1, game.player2} {
 		if p.name == winner {
@@ -20,7 +20,7 @@ func (game *Game) FinishRound() error {
 		}
 	}
 
-	(*game.resetAfterRound)()
+	game.resetAfterRound()
 
 	return nil
 }

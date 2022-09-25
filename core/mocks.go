@@ -14,16 +14,10 @@ func newGame() *Game {
 		currentPlayer: &player1,
 		soldGoods:     GoodMap{},
 	}
-	gameEnded := func() bool { return false }
-	roundEnded := func() bool { return false }
-	resetAfterRound := func() {}
-	roundWinner := func() (Name, error) {
-		return "", nil
-	}
-	game.roundWinner = &roundWinner
-	game.gameEnded = &gameEnded
-	game.roundEnded = &roundEnded
-	game.resetAfterRound = &resetAfterRound
+	game.roundWinner = func() (Name, error) { return "", nil }
+	game.gameEnded = func() bool { return false }
+	game.roundEnded = func() bool { return false }
+	game.resetAfterRound = func() {}
 
 	return &game
 }

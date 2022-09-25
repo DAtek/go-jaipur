@@ -8,22 +8,16 @@ import (
 
 func TestFSM(t *testing.T) {
 	t.Run("FSM returns final state's name", func(t *testing.T) {
-		transit1 := func() StateName {
-			return "state2"
-		}
 		state1 := &State{
 			Name:    "state1",
 			Variant: VariantStart,
-			Transit: &transit1,
+			Transit: func() StateName { return "state2" },
 		}
 
-		transit2 := func() StateName {
-			return "state3"
-		}
 		state2 := &State{
 			Name:    "state2",
 			Variant: VariantIntermediate,
-			Transit: &transit2,
+			Transit: func() StateName { return "state3" },
 		}
 
 		state3 := &State{
@@ -46,24 +40,22 @@ func TestFSM(t *testing.T) {
 		}
 
 		c := context{0}
-		transit1 := func() StateName {
-			c.count++
-			return "state2"
-		}
 		state1 := &State{
 			Name:    "state1",
 			Variant: VariantStart,
-			Transit: &transit1,
+			Transit: func() StateName {
+				c.count++
+				return "state2"
+			},
 		}
 
-		transit2 := func() StateName {
-			c.count += 2
-			return "state3"
-		}
 		state2 := &State{
 			Name:    "state2",
 			Variant: VariantIntermediate,
-			Transit: &transit2,
+			Transit: func() StateName {
+				c.count += 2
+				return "state3"
+			},
 		}
 
 		state3 := &State{

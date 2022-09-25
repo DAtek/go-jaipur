@@ -1,7 +1,7 @@
 package core
 
 func (game *Game) RoundEnded() bool {
-	return (*game.roundEnded)()
+	return game.roundEnded()
 }
 
 func roundEnded(game *Game) bool {

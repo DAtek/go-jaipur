@@ -3,7 +3,7 @@ package core
 const SealsOfExcellenceToWin = Score(2)
 
 func (game *Game) GameEnded() bool {
-	return (*game.gameEnded)()
+	return game.gameEnded()
 }
 
 func gameEnded(game *Game) bool {

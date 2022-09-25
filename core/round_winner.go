@@ -1,11 +1,11 @@
 package core
 
 func (game *Game) RoundWinner() (Name, error) {
-	return (*game.roundWinner)()
+	return game.roundWinner()
 }
 
 func roundWinner(game *Game) (Name, error) {
-	if !(*game.roundEnded)() {
+	if !game.roundEnded() {
 		return "", RoundNotEndedError
 	}
 

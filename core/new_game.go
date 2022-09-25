@@ -22,24 +22,11 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		cardsInPack:  GoodMap{},
 	}
 
-	roundEnded := func() bool {
-		return roundEnded(game)
-	}
-	game.roundEnded = &roundEnded
-
-	gameEnded := func() bool {
-		return gameEnded(game)
-	}
-	game.gameEnded = &gameEnded
-
-	roundWinner := func() (Name, error) {
-		return roundWinner(game)
-	}
-	game.roundWinner = &roundWinner
-
+	game.roundEnded = func() bool { return roundEnded(game) }
+	game.gameEnded = func() bool { return gameEnded(game) }
+	game.roundWinner = func() (Name, error) { return roundWinner(game) }
 	game.currentPlayer = game.player1
-
-	resetAfterRound := func() {
+	game.resetAfterRound = func() {
 		for key, value := range cardsInGame {
 			game.cardsInPack[key] = value
 		}
@@ -52,9 +39,7 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		game.take5RandomCards(game.player1)
 		game.take5RandomCards(game.player2)
 	}
-
-	game.resetAfterRound = &resetAfterRound
-	(*game.resetAfterRound)()
+	game.resetAfterRound()
 
 	return game, nil
 }

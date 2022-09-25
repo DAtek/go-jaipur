@@ -88,7 +88,7 @@ func TestGameWinner(t *testing.T) {
 			game.player2.name = player2Name
 			game.player1.sealsOfExcellence = s.player1Score
 			game.player2.sealsOfExcellence = s.player2Score
-			*game.gameEnded = func() bool { return true }
+			game.gameEnded = func() bool { return true }
 
 			winner, err := game.GameWinner()
 
@@ -99,7 +99,7 @@ func TestGameWinner(t *testing.T) {
 
 	t.Run("Returns error if game not ended", func(t *testing.T) {
 		game := newGame()
-		*game.gameEnded = func() bool { return false }
+		game.gameEnded = func() bool { return false }
 
 		_, err := game.GameWinner()
 

@@ -22,10 +22,10 @@ type Game struct {
 	cardsInPack     GoodMap
 	cardsOnTable    GoodMap
 	currentPlayer   *player
-	resetAfterRound *func()
-	roundEnded      *func() bool
-	gameEnded       *func() bool
-	roundWinner     *func() (Name, error)
+	resetAfterRound func()
+	roundEnded      func() bool
+	gameEnded       func() bool
+	roundWinner     func() (Name, error)
 }
 
 func (game *Game) CurrentPlayerCards() GoodMap {
@@ -52,7 +52,7 @@ func (game *Game) PlayerScores() ScoreMap {
 const GameNotEndedError = JaipurError("Game not ended")
 
 func (game *Game) GameWinner() (Name, error) {
-	if !(*game.gameEnded)() {
+	if !game.gameEnded() {
 		return "", GameNotEndedError
 	}
 	if game.player1.sealsOfExcellence > game.player2.sealsOfExcellence {

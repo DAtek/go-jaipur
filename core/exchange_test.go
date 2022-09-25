@@ -118,7 +118,7 @@ func TestExchange(t *testing.T) {
 
 	t.Run("Error if round ended", func(t *testing.T) {
 		game := newGame()
-		*game.roundEnded = func() bool { return true }
+		game.roundEnded = func() bool { return true }
 
 		error := game.Exchange(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
 
@@ -127,7 +127,7 @@ func TestExchange(t *testing.T) {
 
 	t.Run("Error if game ended", func(t *testing.T) {
 		game := newGame()
-		*game.gameEnded = func() bool { return true }
+		game.gameEnded = func() bool { return true }
 
 		error := game.Exchange(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
 

@@ -14,5 +14,5 @@ const (
 type State struct {
 	Name    StateName
 	Variant Variant
-	Transit *func() StateName
+	Transit func() StateName
 }

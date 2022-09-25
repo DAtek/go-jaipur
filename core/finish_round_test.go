@@ -10,8 +10,8 @@ func TestFinishRound(t *testing.T) {
 	t.Run("Round winner's excellence points will be increased", func(t *testing.T) {
 		game := newGame()
 		game.player1.sealsOfExcellence = 1
-		*game.roundEnded = func() bool { return true }
-		*game.roundWinner = func() (Name, error) {
+		game.roundEnded = func() bool { return true }
+		game.roundWinner = func() (Name, error) {
 			return game.player1.name, nil
 		}
 
@@ -23,8 +23,8 @@ func TestFinishRound(t *testing.T) {
 	t.Run("Game will be reset", func(t *testing.T) {
 		resetCalled := false
 		game := newGame()
-		*game.resetAfterRound = func() { resetCalled = true }
-		*game.roundEnded = func() bool { return true }
+		game.resetAfterRound = func() { resetCalled = true }
+		game.roundEnded = func() bool { return true }
 
 		game.FinishRound()
 
@@ -41,7 +41,7 @@ func TestFinishRound(t *testing.T) {
 
 	t.Run("Error if game ended", func(t *testing.T) {
 		game := newGame()
-		*game.gameEnded = func() bool { return true }
+		game.gameEnded = func() bool { return true }
 
 		error := game.FinishRound()
 

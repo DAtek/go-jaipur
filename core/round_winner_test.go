@@ -9,7 +9,7 @@ import (
 func TestRoundWinner(t *testing.T) {
 	t.Run("Returns round not ended error if round not ended", func(t *testing.T) {
 		game := newGame()
-		*game.roundEnded = func() bool { return false }
+		game.roundEnded = func() bool { return false }
 
 		_, err := roundWinner(game)
 
@@ -33,7 +33,7 @@ func TestRoundWinner(t *testing.T) {
 	for _, s := range winnerScenarios {
 		t.Run("Returns the player with the biggest score", func(t *testing.T) {
 			game := newGame()
-			*game.roundEnded = func() bool { return true }
+			game.roundEnded = func() bool { return true }
 			game.player1.score = s.player1Score
 			game.player2.score = s.player2Score
 			game.player1.name = player1Name
@@ -50,7 +50,7 @@ func TestRoundWinner(t *testing.T) {
 
 	t.Run("No winner if players have the same score", func(t *testing.T) {
 		game := newGame()
-		*game.roundEnded = func() bool { return true }
+		game.roundEnded = func() bool { return true }
 
 		winner, err := roundWinner(game)
 
