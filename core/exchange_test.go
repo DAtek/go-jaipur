@@ -116,6 +116,17 @@ func TestExchange(t *testing.T) {
 		assert.EqualError(t, error, GoodsAmountsMismatchError.Error())
 	})
 
+	t.Run("Error if player wants to acquire more than 7 goods which aren't camel", func(t *testing.T) {
+		game := newGame()
+		game.cardsOnTable = GoodMap{GoodCloth: 3}
+		game.currentPlayer.cards = GoodMap{GoodDiamond: 7}
+		game.currentPlayer.herdSize = 3
+
+		error := game.Exchange(GoodMap{GoodCloth: 1}, GoodMap{GoodCamel: 1})
+
+		assert.EqualError(t, PlayerHasTooManyCardsError, error.Error())
+	})
+
 	t.Run("Error if round ended", func(t *testing.T) {
 		game := newGame()
 		game.roundEnded = func() bool { return true }

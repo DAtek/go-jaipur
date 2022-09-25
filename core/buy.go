@@ -1,6 +1,6 @@
 package core
 
-const PlayerHasTooManyCardsError = JaipurError("PlayerHasTooManyCards")
+const MaximalPlayerCards = Amount(7)
 
 func (game *Game) Buy(card GoodType) error {
 	if game.gameEnded() {
@@ -16,7 +16,7 @@ func (game *Game) Buy(card GoodType) error {
 		sumPlayerCards += amount
 	}
 
-	if sumPlayerCards == 7 {
+	if sumPlayerCards == MaximalPlayerCards {
 		return PlayerHasTooManyCardsError
 	}
 
