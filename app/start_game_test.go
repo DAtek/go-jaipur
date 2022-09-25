@@ -1,6 +1,9 @@
 package app
 
 import (
+	"bytes"
+	"fmt"
+	"io"
 	"jaipur/core"
 	"strings"
 	"testing"
@@ -11,11 +14,11 @@ import (
 func TestStartGame(t *testing.T) {
 	t.Run("Returns original state when players have the same name", func(t *testing.T) {
 		m := newMockApp()
-		m.reader.Write([]byte("a"))
-		m.reader.Write([]byte("\n"))
-		m.reader.Write([]byte("a"))
+		input := func(r io.Reader, w io.Writer, s string) string {
+			return "a"
+		}
 
-		nextState := startGame(m.app)
+		nextState := startGame(m.app, input)
 		output := m.writer.String()
 
 		assert.Equal(t, gameStart.Name, nextState)
@@ -23,14 +26,15 @@ func TestStartGame(t *testing.T) {
 	})
 
 	t.Run("Collects player names", func(t *testing.T) {
-		player1 := "a"
-		player2 := "b"
 		m := newMockApp()
-		m.reader.Write([]byte(player1))
-		m.reader.Write([]byte("\n"))
-		m.reader.Write([]byte(player2))
+		players := []string{"player1", "player2"}
+		index := -1
+		input := func(r io.Reader, w io.Writer, s string) string {
+			index += 1
+			return players[index]
+		}
 
-		nextState := startGame(m.app)
+		nextState := startGame(m.app, input)
 		output := m.writer.String()
 
 		assert.Equal(t, playerTurn.Name, nextState)
@@ -39,11 +43,17 @@ func TestStartGame(t *testing.T) {
 
 	t.Run("Asks for player names", func(t *testing.T) {
 		m := newMockApp()
+		buf := bytes.Buffer{}
+		m.writer = &buf
+		input := func(r io.Reader, w io.Writer, s string) string {
+			buf.WriteString(s)
+			return ""
+		}
 
-		startGame(m.app)
+		startGame(m.app, input)
 
 		output := m.writer.String()
-
+		fmt.Printf("output: %v\n", output)
 		assert.True(t, strings.Contains(output, "Enter player 1 name: "))
 		assert.True(t, strings.Contains(output, "Enter player 2 name: "))
 	})

@@ -9,8 +9,12 @@ import (
 
 const clearScreenString = "\033[2J\033[H"
 
-func input(reader *bufio.Reader, writer io.Writer, prompt string) string {
+// const clearScreenString = "\n"
+
+func input(reader io.Reader, writer io.Writer, prompt string) string {
 	fmt.Fprint(writer, prompt)
-	line, _ := reader.ReadString('\n')
+	scanner := bufio.NewScanner(reader)
+	scanner.Scan()
+	line := scanner.Text()
 	return strings.Trim(line, "\n")
 }
