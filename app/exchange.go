@@ -11,7 +11,7 @@ import (
 type inputParser func(string) (core.GoodMap, bool)
 
 func exchange(app *App, parseInput inputParser) fsm.StateName {
-	buyString := input(app.reader, app.writer, "Buy goods eg. 2G, 1S: ")
+	buyString := input(app.reader, app.writer, "Buy goods eg. 2G, 1Si: ")
 	buy, ok := parseInput(buyString)
 	if !ok {
 		fmt.Fprint(app.writer, "Invalid input for buying.\n\n")
