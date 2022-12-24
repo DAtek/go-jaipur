@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/DAtek/go-jaipur/branch/master/graph/badge.svg?token=7QLVUTCXMZ)](https://codecov.io/gh/DAtek/go-jaipur)
+
 # Japipur board game in Go
 
 ## Project structure
