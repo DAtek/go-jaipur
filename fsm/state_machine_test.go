@@ -25,10 +25,7 @@ func TestFSM(t *testing.T) {
 			Variant: VariantFinal,
 		}
 
-		fsm := FSM{
-			States: []*State{state1, state2, state3},
-		}
-
+		fsm := NewFSM([]*State{state1, state2, state3})
 		result := fsm.Run()
 
 		assert.Equal(t, result, state3.Name)
@@ -63,10 +60,7 @@ func TestFSM(t *testing.T) {
 			Variant: VariantFinal,
 		}
 
-		fsm := FSM{
-			States: []*State{state1, state2, state3},
-		}
-
+		fsm := NewFSM([]*State{state1, state2, state3})
 		fsm.Run()
 
 		assert.Equal(t, uint8(3), c.count)

@@ -8,7 +8,7 @@ import (
 
 type App struct {
 	game   core.IGame
-	fsm    *fsm.FSM
+	fsm    fsm.IFSM
 	reader io.Reader
 	writer io.Writer
 }

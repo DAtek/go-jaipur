@@ -90,9 +90,7 @@ func (s *simulator) run() {
 		Variant: fsm.VariantFinal,
 	}
 
-	stateMachine := fsm.FSM{
-		States: []*fsm.State{&player1Turn, &player2Turn, &showWinner, &finalState},
-	}
+	stateMachine := fsm.NewFSM([]*fsm.State{&player1Turn, &player2Turn, &showWinner, &finalState})
 
 	stateMachine.Run()
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func NewApp(reader io.Reader, writer io.Writer) *App {
-	driver := &fsm.FSM{States: []*fsm.State{&gameStart, &playerTurn, &roundEnded, &gameEnded, &finalState}}
+	driver := fsm.NewFSM([]*fsm.State{&gameStart, &playerTurn, &roundEnded, &gameEnded, &finalState})
 
 	app := &App{
 		fsm:    driver,
