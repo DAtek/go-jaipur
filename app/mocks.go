@@ -15,10 +15,10 @@ type mockGame struct {
 	cardsOnTable       core.GoodMap
 	roundEnded         bool
 	gameEnded          bool
-	roundWinner        *func() (core.Name, error)
+	roundWinner        func() (core.Name, error)
 	playerScores       core.ScoreMap
 	finishRound        func() error
-	gameWinner         *func() (core.Name, error)
+	gameWinner         func() (core.Name, error)
 }
 
 type mockApp struct {
@@ -62,7 +62,7 @@ func (game *mockGame) Exchange(buy core.GoodMap, sell core.GoodMap) error {
 }
 
 func (game *mockGame) RoundWinner() (core.Name, error) {
-	return (*game.roundWinner)()
+	return game.roundWinner()
 }
 
 func (game *mockGame) PlayerScores() core.ScoreMap {
@@ -74,7 +74,7 @@ func (game *mockGame) FinishRound() error {
 }
 
 func (game *mockGame) GameWinner() (core.Name, error) {
-	return (*game.gameWinner)()
+	return game.gameWinner()
 }
 
 func newMockApp() *mockApp {
@@ -94,8 +94,8 @@ func newMockApp() *mockApp {
 	gameWinner := func() (core.Name, error) {
 		return "", nil
 	}
-	game.roundWinner = &roundWinner
-	game.gameWinner = &gameWinner
+	game.roundWinner = roundWinner
+	game.gameWinner = gameWinner
 	game.finishRound = func() error { return nil }
 
 	return &mockApp{

@@ -16,7 +16,7 @@ func TestFinishRound(t *testing.T) {
 		roundWinner := func() (core.Name, error) {
 			return winner, nil
 		}
-		mockApp.game.roundWinner = &roundWinner
+		mockApp.game.roundWinner = roundWinner
 		susie := core.Name("Susie")
 		johann := core.Name("Johann")
 		mockApp.game.playerScores = core.ScoreMap{

@@ -15,7 +15,7 @@ func TestEndGame(t *testing.T) {
 		gameWinner := func() (core.Name, error) {
 			return core.Name(name), nil
 		}
-		mockApp.game.gameWinner = &gameWinner
+		mockApp.game.gameWinner = gameWinner
 
 		endGame(mockApp.app)
 
@@ -47,7 +47,7 @@ func TestEndGame(t *testing.T) {
 		gameWinner := func() (core.Name, error) {
 			return "", core.GameNotEndedError
 		}
-		mockApp.game.gameWinner = &gameWinner
+		mockApp.game.gameWinner = gameWinner
 
 		assert.Panics(t, func() { endGame(mockApp.app) })
 	})
