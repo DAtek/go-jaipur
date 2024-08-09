@@ -5,7 +5,7 @@ const EmptyNameError = JaipurError("Player got empty name")
 
 const EmptyName = ""
 
-func NewGame(player1Name, player2Name Name) (*Game, error) {
+func NewGame(player1Name, player2Name Name) (IGame, error) {
 	if player1Name == EmptyName || player2Name == EmptyName {
 		return nil, EmptyNameError
 	}
@@ -14,7 +14,7 @@ func NewGame(player1Name, player2Name Name) (*Game, error) {
 		return nil, error(SameNamesError)
 	}
 
-	game := &Game{
+	game := &game{
 		player1:     &player{name: player1Name, sealsOfExcellence: 0},
 		player2:     &player{name: player2Name, sealsOfExcellence: 0},
 		cardsInPack: GoodMap{},

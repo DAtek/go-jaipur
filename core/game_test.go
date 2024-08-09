@@ -8,7 +8,7 @@ import (
 
 func TestCurrentPlayerCards(t *testing.T) {
 	t.Run("Returns current player's cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		playerCards := game.CurrentPlayerCards()
 
@@ -19,7 +19,7 @@ func TestCurrentPlayerCards(t *testing.T) {
 	})
 
 	t.Run("Mutating the result won't affect game", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		playerCards := game.CurrentPlayerCards()
 		playerCards[GoodDiamond] = 50
@@ -30,7 +30,7 @@ func TestCurrentPlayerCards(t *testing.T) {
 
 func TestCardsOnTable(t *testing.T) {
 	t.Run("Returns cards on table", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		cards := game.CardsOnTable()
 
@@ -38,7 +38,7 @@ func TestCardsOnTable(t *testing.T) {
 	})
 
 	t.Run("Mutating the result won't affect game", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		cards := game.CardsOnTable()
 		cards[GoodDiamond] = 50
@@ -48,7 +48,7 @@ func TestCardsOnTable(t *testing.T) {
 }
 
 func TestCurrentPlayerName(t *testing.T) {
-	game := newGame()
+	game := newGameMock()
 
 	name := game.CurrentPlayerName()
 
@@ -56,7 +56,7 @@ func TestCurrentPlayerName(t *testing.T) {
 }
 
 func TestScoreMap(t *testing.T) {
-	game := newGame()
+	game := newGameMock()
 	game.player1.score = 24
 	game.player2.score = 42
 
@@ -83,7 +83,7 @@ func TestGameWinner(t *testing.T) {
 	}
 	for _, s := range winnerScenarios {
 		t.Run("Returns winner", func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.player1.name = player1Name
 			game.player2.name = player2Name
 			game.player1.sealsOfExcellence = s.player1Score
@@ -98,7 +98,7 @@ func TestGameWinner(t *testing.T) {
 	}
 
 	t.Run("Returns error if game not ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.gameEnded = func() bool { return false }
 
 		_, err := game.GameWinner()

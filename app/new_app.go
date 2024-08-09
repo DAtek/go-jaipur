@@ -14,10 +14,10 @@ func NewApp(reader io.Reader, writer io.Writer) *App {
 		writer: writer,
 	}
 
-	playerCommands := &playerCommandCollection{
-		Buy:      func() fsm.StateName { return buy(app) },
-		Sell:     func() fsm.StateName { return sell(app) },
-		Exchange: func() fsm.StateName { return exchange(app, parseExchangeInput) },
+	playerCommands := playerCommandCollection{
+		"B": func() fsm.StateName { return buy(app) },
+		"S": func() fsm.StateName { return sell(app) },
+		"E": func() fsm.StateName { return exchange(app, parseExchangeInput) },
 	}
 
 	gameStart.Transit = func() fsm.StateName { return startGame(app, input) }

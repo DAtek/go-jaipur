@@ -22,7 +22,7 @@ func TestRoundEnded(t *testing.T) {
 
 	for _, s := range tokenDepletedScenarios {
 		t.Run("Round ended when 3 tokens depleted", func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.soldGoods = s
 
 			assert.Equal(t, true, roundEnded(game))
@@ -30,7 +30,7 @@ func TestRoundEnded(t *testing.T) {
 	}
 
 	t.Run("Round ended when there are less than 5 cards on table", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodCloth: 4}
 
 		assert.Equal(t, true, roundEnded(game))

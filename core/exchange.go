@@ -2,7 +2,7 @@ package core
 
 const GoodsAmountsMismatchError = JaipurError("Goods amounts mismatch")
 
-func (game *Game) Exchange(buy, sell GoodMap) error {
+func (game *game) Exchange(buy, sell GoodMap) error {
 	if err := game.validateExchangeInput(buy, sell); err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (game *Game) Exchange(buy, sell GoodMap) error {
 	return nil
 }
 
-func (game *Game) validateExchangeInput(buy, sell GoodMap) error {
+func (game *game) validateExchangeInput(buy, sell GoodMap) error {
 	if game.gameEnded() {
 		return GameEndedError
 	}

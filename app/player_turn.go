@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateName {
+func doPlayerAction(app *App, playerCommands playerCommandCollection) fsm.StateName {
 	fmt.Fprintln(app.writer, string(app.game.CurrentPlayerName())+", it's your turn")
 	cardsOnTable := formatGoodMap(app.game.CardsOnTable())
 	playerCards := formatGoodMap(app.game.CurrentPlayerCards())
@@ -17,16 +17,12 @@ func doPlayerAction(app *App, playerCommand *playerCommandCollection) fsm.StateN
 
 	action := input(app.reader, app.writer, "Pick an action - (E)xchange | (S)ell | (B)uy: ")
 	action = strings.ToUpper(action)
+	command, ok := playerCommands[action]
 
-	switch action {
-	case "B":
-		return playerCommand.Buy()
-	case "E":
-		return playerCommand.Exchange()
-	case "S":
-		return playerCommand.Sell()
-	default:
+	if !ok {
 		fmt.Fprint(app.writer, "Wrong action.\n\n")
 		return playerTurn.Name
 	}
+
+	return command()
 }

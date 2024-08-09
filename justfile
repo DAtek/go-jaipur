@@ -3,16 +3,13 @@ pkgs := "./core ./app ./fsm"
 
 
 test *opts:
-    go test {{ pkgs }} {{ opts }}
-
+    gotestsum -f dots-v2 -- {{ opts }} {{ pkgs }}
 
 test-cover *opts:
-    go test -coverprofile {{ coverfile }} {{ pkgs }} {{ opts }}
-
+    gotestsum -f dots-v2 -- {{ opts }} -coverprofile {{ coverfile }} {{ pkgs }}
 
 show-coverage:
-    go tool cover -html={{ coverfile }}
-
+    go tool cover -html {{ coverfile }}
 
 test-and-show-coverage: test-cover show-coverage
 

@@ -20,7 +20,7 @@ func TestGameEnded(t *testing.T) {
 
 	for _, s := range scenarios {
 		t.Run("Game ended", func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.player1.sealsOfExcellence = s.player1SealsOfExcellence
 			game.player2.sealsOfExcellence = s.player2SealsOfExcellence
 
