@@ -15,7 +15,7 @@ type IGame interface {
 	GameWinner() (Name, error)
 }
 
-type Game struct {
+type game struct {
 	player1         *player
 	player2         *player
 	soldGoods       GoodMap
@@ -28,21 +28,21 @@ type Game struct {
 	roundWinner     func() (Name, error)
 }
 
-func (game *Game) CurrentPlayerCards() GoodMap {
+func (game *game) CurrentPlayerCards() GoodMap {
 	cards := game.currentPlayer.cards.Copy()
 	cards[GoodCamel] = game.currentPlayer.herdSize
 	return cards
 }
 
-func (game *Game) CardsOnTable() GoodMap {
+func (game *game) CardsOnTable() GoodMap {
 	return game.cardsOnTable.Copy()
 }
 
-func (game *Game) CurrentPlayerName() Name {
+func (game *game) CurrentPlayerName() Name {
 	return game.currentPlayer.name
 }
 
-func (game *Game) PlayerScores() ScoreMap {
+func (game *game) PlayerScores() ScoreMap {
 	return ScoreMap{
 		game.player1.name: game.player1.score,
 		game.player2.name: game.player2.score,
@@ -51,7 +51,7 @@ func (game *Game) PlayerScores() ScoreMap {
 
 const GameNotEndedError = JaipurError("Game not ended")
 
-func (game *Game) GameWinner() (Name, error) {
+func (game *game) GameWinner() (Name, error) {
 	if !game.gameEnded() {
 		return "", GameNotEndedError
 	}

@@ -1,6 +1,6 @@
 package core
 
-func (game *Game) Buy(card GoodType) error {
+func (game *game) Buy(card GoodType) error {
 	if game.gameEnded() {
 		return GameEndedError
 	}

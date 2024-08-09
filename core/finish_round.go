@@ -2,7 +2,7 @@ package core
 
 const RoundNotEndedError = JaipurError("Round not ended")
 
-func (game *Game) FinishRound() error {
+func (game *game) FinishRound() error {
 	if game.gameEnded() {
 		return GameEndedError
 	}

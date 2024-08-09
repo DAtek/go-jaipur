@@ -1,10 +1,10 @@
 package core
 
-func (game *Game) RoundEnded() bool {
+func (game *game) RoundEnded() bool {
 	return game.roundEnded()
 }
 
-func roundEnded(game *Game) bool {
+func roundEnded(game *game) bool {
 	depletedTokens := Amount(0)
 	for good, amount := range game.soldGoods {
 		if Amount(len(coins[good])) == amount {

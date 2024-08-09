@@ -1,10 +1,10 @@
 package core
 
-func (game *Game) RoundWinner() (Name, error) {
+func (game *game) RoundWinner() (Name, error) {
 	return game.roundWinner()
 }
 
-func roundWinner(game *Game) (Name, error) {
+func roundWinner(game *game) (Name, error) {
 	if !game.roundEnded() {
 		return "", RoundNotEndedError
 	}

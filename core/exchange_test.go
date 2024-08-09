@@ -8,7 +8,7 @@ import (
 
 func TestExchange(t *testing.T) {
 	t.Run("Player has the wanted cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.currentPlayer.cards = GoodMap{
 			GoodCloth:   4,
 			GoodLeather: 3,
@@ -28,7 +28,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Player doesn't have the sold cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.herdSize = 1
 
 		game.Exchange(
@@ -42,7 +42,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("The picked cards aren't on the table", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		game.Exchange(
 			GoodMap{GoodDiamond: 2, GoodGold: 1},
@@ -54,7 +54,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Table has the dropped cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		game.Exchange(
 			GoodMap{GoodDiamond: 2, GoodGold: 1},
@@ -66,7 +66,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Current player changes", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		game.Exchange(
 			GoodMap{GoodDiamond: 2, GoodGold: 1},
@@ -77,7 +77,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if player doesn't have proper cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{}
 		game.cardsOnTable = GoodMap{GoodCloth: 2}
 
@@ -87,7 +87,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if player doesn't big enough herd", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.herdSize = 1
 		game.player1.cards = GoodMap{GoodCloth: 1}
 		game.cardsOnTable = GoodMap{GoodDiamond: 3}
@@ -98,7 +98,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if there are not enough cards on the table", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{}
 
 		error := game.Exchange(
@@ -110,7 +110,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if player wants to exchange different amounts", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodCloth: 3}
 		game.currentPlayer.cards = GoodMap{GoodDiamond: 2}
 
@@ -120,7 +120,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if player wants to acquire more than 7 goods which aren't camel", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodCloth: 3}
 		game.currentPlayer.cards = GoodMap{GoodDiamond: 7}
 		game.currentPlayer.herdSize = 3
@@ -131,7 +131,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if round ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.roundEnded = func() bool { return true }
 
 		error := game.Exchange(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})
@@ -140,7 +140,7 @@ func TestExchange(t *testing.T) {
 	})
 
 	t.Run("Error if game ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.gameEnded = func() bool { return true }
 
 		error := game.Exchange(GoodMap{GoodCloth: 3}, GoodMap{GoodDiamond: 2})

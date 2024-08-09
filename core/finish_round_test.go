@@ -8,7 +8,7 @@ import (
 
 func TestFinishRound(t *testing.T) {
 	t.Run("Round winner's excellence points will be increased", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.sealsOfExcellence = 1
 		game.roundEnded = func() bool { return true }
 		game.roundWinner = func() (Name, error) {
@@ -20,9 +20,9 @@ func TestFinishRound(t *testing.T) {
 		assert.Equal(t, Score(2), game.player1.sealsOfExcellence)
 	})
 
-	t.Run("Game will be reset", func(t *testing.T) {
+	t.Run("Game will reset itself", func(t *testing.T) {
 		resetCalled := false
-		game := newGame()
+		game := newGameMock()
 		game.resetAfterRound = func() { resetCalled = true }
 		game.roundEnded = func() bool { return true }
 
@@ -32,7 +32,7 @@ func TestFinishRound(t *testing.T) {
 	})
 
 	t.Run("Error if round not ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 
 		e := game.FinishRound()
 
@@ -40,7 +40,7 @@ func TestFinishRound(t *testing.T) {
 	})
 
 	t.Run("Error if game ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.gameEnded = func() bool { return true }
 
 		error := game.FinishRound()

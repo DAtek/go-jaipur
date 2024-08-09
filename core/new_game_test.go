@@ -3,6 +3,7 @@ package core
 import (
 	"testing"
 
+	"github.com/DAtek/gotils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +17,7 @@ func TestNewGame(t *testing.T) {
 			player1 := Name(s[0])
 			player2 := Name(s[1])
 
-			_, err := NewGame(player1, player2)
+			_, err := newGame(player1, player2)
 
 			assert.EqualError(t, EmptyNameError, err.Error())
 		})
@@ -26,7 +27,7 @@ func TestNewGame(t *testing.T) {
 		player1 := Name("a")
 		player2 := Name("b")
 
-		game, _ := NewGame(player1, player2)
+		game := gotils.ResultOrPanic(newGame(player1, player2))
 
 		assert.Equal(t, player1, game.player1.name)
 		assert.Equal(t, player2, game.player2.name)
@@ -36,7 +37,7 @@ func TestNewGame(t *testing.T) {
 		player1 := Name("a")
 		player2 := Name("b")
 
-		game, _ := NewGame(player1, player2)
+		game, _ := newGame(player1, player2)
 
 		assert.Equal(t, player1, game.currentPlayer.name)
 	})
@@ -45,7 +46,7 @@ func TestNewGame(t *testing.T) {
 		player1 := Name("a")
 		player2 := Name("b")
 
-		game, _ := NewGame(player1, player2)
+		game, _ := newGame(player1, player2)
 
 		assert.Equal(t, Score(0), game.player1.score)
 		assert.Equal(t, Score(0), game.player2.score)
@@ -55,14 +56,14 @@ func TestNewGame(t *testing.T) {
 		player1 := Name("a")
 		player2 := Name("b")
 
-		game, _ := NewGame(player1, player2)
+		game, _ := newGame(player1, player2)
 
 		assert.Equal(t, Score(0), game.player1.sealsOfExcellence)
 		assert.Equal(t, Score(0), game.player2.sealsOfExcellence)
 	})
 
 	t.Run("There are 5 cards on the table", func(t *testing.T) {
-		game, _ := NewGame("a", "b")
+		game, _ := newGame("a", "b")
 
 		cardsOnTable := Amount(0)
 		for _, value := range game.cardsOnTable {
@@ -72,13 +73,13 @@ func TestNewGame(t *testing.T) {
 	})
 
 	t.Run("There are at least 3 camels on the table", func(t *testing.T) {
-		game, _ := NewGame("a", "b")
+		game, _ := newGame("a", "b")
 
 		assert.GreaterOrEqual(t, game.cardsOnTable[GoodCamel], Amount(3))
 	})
 
 	t.Run("There are 40 cards in the pack", func(t *testing.T) {
-		game, _ := NewGame("a", "b")
+		game, _ := newGame("a", "b")
 
 		cardsInPack := Amount(0)
 		for _, amount := range game.cardsInPack {
@@ -113,4 +114,17 @@ func TestNewGame(t *testing.T) {
 
 		assert.Error(t, err)
 	})
+}
+
+func newGame(player1, player2 Name) (*game, error) {
+	igame, err := NewGame(player1, player2)
+	if igame == nil {
+		return nil, err
+	}
+
+	game, ok := igame.(*game)
+	if !ok {
+		panic("COULD_NOT_CONVERT_IGAME_TO_GAME")
+	}
+	return game, err
 }

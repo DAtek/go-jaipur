@@ -8,7 +8,7 @@ import (
 
 func TestBuy(t *testing.T) {
 	t.Run("Player has the choosen card", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodDiamond: Amount(1)}
 
 		game.Buy(GoodDiamond)
@@ -17,7 +17,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Current player changes", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player2.cards = GoodMap{GoodDiamond: Amount(1)}
 		game.currentPlayer = game.player2
 
@@ -27,7 +27,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Player takes all camels", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodCamel: Amount(5)}
 
 		game.Buy(GoodCamel)
@@ -36,7 +36,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Cards on table won't contain the picked card", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodGold: Amount(1)}
 
 		game.Buy(GoodGold)
@@ -45,7 +45,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("The same amount of cards will be moved from the pack to the table", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodDiamond: Amount(3)}
 		game.cardsInPack = GoodMap{GoodSpice: Amount(5)}
 
@@ -62,7 +62,7 @@ func TestBuy(t *testing.T) {
 
 	for _, s := range cardsOnTableScenarios {
 		t.Run("Error if not enough cards on table", func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.cardsOnTable = s
 
 			e := game.Buy(GoodDiamond)
@@ -72,7 +72,7 @@ func TestBuy(t *testing.T) {
 	}
 
 	t.Run("There is no enough cards in pack", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.cardsOnTable = GoodMap{GoodDiamond: Amount(5)}
 		game.cardsInPack = GoodMap{}
 
@@ -87,7 +87,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Error if round ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.roundEnded = func() bool { return true }
 
 		error := game.Buy(GoodCloth)
@@ -96,7 +96,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Error if game ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.gameEnded = func() bool { return true }
 
 		error := game.Buy(GoodCloth)
@@ -105,7 +105,7 @@ func TestBuy(t *testing.T) {
 	})
 
 	t.Run("Error if player has too many cards", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodDiamond: 7}
 
 		error := game.Buy(GoodCloth)

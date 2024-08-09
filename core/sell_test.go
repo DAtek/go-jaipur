@@ -21,7 +21,7 @@ func TestSell(t *testing.T) {
 
 	for _, s := range simpleScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			game.Sell(s.goodsType)
@@ -45,7 +45,7 @@ func TestSell(t *testing.T) {
 
 	for _, s := range bonusScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			game.Sell(s.goodsType)
@@ -68,7 +68,7 @@ func TestSell(t *testing.T) {
 
 	for _, s := range notEnoughCardsToSellScenarios {
 		t.Run(s.name, func(t *testing.T) {
-			game := newGame()
+			game := newGameMock()
 			game.player1.cards = GoodMap{s.goodsType: s.amount}
 
 			error := game.Sell(s.goodsType)
@@ -78,7 +78,7 @@ func TestSell(t *testing.T) {
 	}
 
 	t.Run("Player sells partial amount", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodSilver: 3}
 		game.soldGoods = GoodMap{GoodSilver: 3}
 
@@ -88,7 +88,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("New score adds up to player's score", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodSilver: 2}
 		game.player1.score = Score(1)
 
@@ -98,7 +98,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("Can't sell camel", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodCamel: 2}
 
 		error := game.Sell(GoodCamel)
@@ -107,7 +107,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("Current player changes", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.player1.cards = GoodMap{GoodDiamond: 2}
 
 		game.Sell(GoodDiamond)
@@ -116,7 +116,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("Error if round ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.roundEnded = func() bool { return true }
 
 		error := game.Sell(GoodCloth)
@@ -125,7 +125,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("Error if game ended", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.gameEnded = func() bool { return true }
 
 		error := game.Sell(GoodCloth)
@@ -134,7 +134,7 @@ func TestSell(t *testing.T) {
 	})
 
 	t.Run("Error if all the goods are sold", func(t *testing.T) {
-		game := newGame()
+		game := newGameMock()
 		game.currentPlayer.cards = GoodMap{GoodCloth: 1}
 		game.soldGoods = GoodMap{GoodCloth: Amount(len(coins[GoodCloth]))}
 

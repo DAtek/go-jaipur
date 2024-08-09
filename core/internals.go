@@ -2,10 +2,9 @@ package core
 
 import (
 	"math/rand"
-	"time"
 )
 
-func (game *Game) moveCardsFromPackToTable(amount Amount) {
+func (game *game) moveCardsFromPackToTable(amount Amount) {
 	allCards := game.getAllCardsFromPack()
 
 	if Amount(len(allCards)) < amount {
@@ -13,7 +12,6 @@ func (game *Game) moveCardsFromPackToTable(amount Amount) {
 	}
 
 	for i := Amount(0); i < amount; i++ {
-		rand.Seed(time.Now().UnixNano())
 		cardIndex := rand.Intn(len(allCards))
 		card := allCards[cardIndex]
 		game.cardsInPack[card]--
@@ -22,11 +20,10 @@ func (game *Game) moveCardsFromPackToTable(amount Amount) {
 	}
 }
 
-func (game *Game) take5RandomCards(player *player) {
+func (game *game) take5RandomCards(player *player) {
 	allCards := game.getAllCardsFromPack()
 
-	for i := Amount(0); i < 5; i++ {
-		rand.Seed(time.Now().UnixNano())
+	for range 5 {
 		cardIndex := rand.Intn(len(allCards))
 		card := allCards[cardIndex]
 		game.cardsInPack[card]--
@@ -43,17 +40,17 @@ func (game *Game) take5RandomCards(player *player) {
 
 }
 
-func (game *Game) getAllCardsFromPack() []GoodType {
+func (game *game) getAllCardsFromPack() []GoodType {
 	allCards := []GoodType{}
 	for key, value := range game.cardsInPack {
-		for i := Amount(0); i < value; i++ {
+		for range value {
 			allCards = append(allCards, key)
 		}
 	}
 	return allCards
 }
 
-func (game *Game) changeCurrentPlayer() {
+func (game *game) changeCurrentPlayer() {
 	switch game.currentPlayer.name {
 	case game.player1.name:
 		game.currentPlayer = game.player2
@@ -71,7 +68,6 @@ func getBonus(goodsNumber Amount) Score {
 		goodsNumber = 5
 	}
 
-	rand.Seed(time.Now().UnixNano())
 	minMax := bonuses[goodsNumber]
 	min := int(minMax[0])
 	max := int(minMax[1])
