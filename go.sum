@@ -1,3 +1,5 @@
+github.com/DAtek/fsm v0.1.0 h1:JUUbEZyGQxKegZAA025Z9AiVuZ8lCOJPlHez6A549vo=
+github.com/DAtek/fsm v0.1.0/go.mod h1:TDj6sN5Z+nIM2HKHfP5u67JdKJM9Z30zEy8DtiI3btk=
 github.com/DAtek/gotils v0.1.3 h1:5QaR2uIGGZtxWsrBtkuM1laVdIlMIazasQ+zr/2ggyQ=
 github.com/DAtek/gotils v0.1.3/go.mod h1:P3X0hncghmh6WaxNQFSturLwCG5IwOK13xTnAIYbet4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

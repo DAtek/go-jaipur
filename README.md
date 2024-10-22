@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/DAtek/go-jaipur/graph/badge.svg?token=7QLVUTCXMZ)](https://codecov.io/gh/DAtek/go-jaipur)
+[![codecov](https://codecov.io/gh/DAtek/go-jaipur/branch/master/graph/badge.svg?token=7QLVUTCXMZ)](https://codecov.io/gh/DAtek/go-jaipur)
 
 # Japipur board game in Go
 
@@ -15,6 +15,3 @@ A console interface to the game.
 ### `core`
 
 Pure domain logic.
-
-### `fsm`
-A very minimalistic implementation of a Finite State Machine, used by the `app` package.

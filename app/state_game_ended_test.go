@@ -5,10 +5,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/DAtek/fsm"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEndGame(t *testing.T) {
+func TestGameEnded(t *testing.T) {
 	t.Run("Displays winner", func(t *testing.T) {
 		mockApp := newMockApp()
 		name := "Clara"
@@ -17,7 +18,7 @@ func TestEndGame(t *testing.T) {
 		}
 		mockApp.game.gameWinner = gameWinner
 
-		endGame(mockApp.app)
+		gameEnded.Transit(mockApp.app)
 
 		output := mockApp.writer.String()
 
@@ -27,7 +28,7 @@ func TestEndGame(t *testing.T) {
 	t.Run("Prompts to continue", func(t *testing.T) {
 		mockApp := newMockApp()
 
-		endGame(mockApp.app)
+		gameEnded.Transit(mockApp.app)
 
 		output := mockApp.writer.String()
 
@@ -37,9 +38,9 @@ func TestEndGame(t *testing.T) {
 	t.Run("Returns final state", func(t *testing.T) {
 		mockApp := newMockApp()
 
-		nextState := endGame(mockApp.app)
+		nextState := gameEnded.Transit(mockApp.app)
 
-		assert.Equal(t, finalState.Name, nextState)
+		assert.Equal(t, fsm.STATE_FINAL, nextState)
 	})
 
 	t.Run("Panics if core game not ended", func(t *testing.T) {
@@ -49,6 +50,6 @@ func TestEndGame(t *testing.T) {
 		}
 		mockApp.game.gameWinner = gameWinner
 
-		assert.Panics(t, func() { endGame(mockApp.app) })
+		assert.Panics(t, func() { gameEnded.Transit(mockApp.app) })
 	})
 }

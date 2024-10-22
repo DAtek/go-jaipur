@@ -3,38 +3,39 @@ package app
 import (
 	"fmt"
 	"jaipur/core"
-	"jaipur/fsm"
 	"strconv"
 	"strings"
+
+	"github.com/DAtek/fsm"
 )
 
 type inputParser func(string) (core.GoodMap, bool)
 
 func exchange(app *App, parseInput inputParser) fsm.StateName {
-	buyString := input(app.reader, app.writer, "Buy goods eg. 2G, 1Si: ")
+	buyString := input(app.Reader, app.Writer, "Buy goods eg. 2G, 1Si: ")
 	buy, ok := parseInput(buyString)
 	if !ok {
-		fmt.Fprint(app.writer, "Invalid input for buying.\n\n")
-		return playerTurn.Name
+		fmt.Fprint(app.Writer, "Invalid input for buying.\n\n")
+		return STATE_PLAYER_TURN
 	}
 
-	sellString := input(app.reader, app.writer, "Sell goods eg. 2G, 1Ca: ")
+	sellString := input(app.Reader, app.Writer, "Sell goods eg. 2G, 1Ca: ")
 	sell, ok := parseInput(sellString)
 
 	if !ok {
-		fmt.Fprint(app.writer, "Invalid input for selling.\n\n")
-		return playerTurn.Name
+		fmt.Fprint(app.Writer, "Invalid input for selling.\n\n")
+		return STATE_PLAYER_TURN
 	}
 
-	err := app.game.Exchange(buy, sell)
+	err := app.Game.Exchange(buy, sell)
 
 	if err != nil {
-		fmt.Fprint(app.writer, err.Error()+"\n\n")
-		return playerTurn.Name
+		fmt.Fprint(app.Writer, err.Error()+"\n\n")
+		return STATE_PLAYER_TURN
 	}
 
-	fmt.Fprint(app.writer, clearScreenString)
-	return playerTurn.Name
+	fmt.Fprint(app.Writer, clearScreenString)
+	return STATE_PLAYER_TURN
 }
 
 func parseExchangeInput(input string) (core.GoodMap, bool) {

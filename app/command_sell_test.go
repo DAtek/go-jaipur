@@ -29,7 +29,7 @@ func TestSell(t *testing.T) {
 		nextState := sell(mockApp.app)
 
 		assert.True(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 
 	t.Run("Next state is round ended when round ended", func(t *testing.T) {
@@ -39,7 +39,7 @@ func TestSell(t *testing.T) {
 
 		nextState := sell(mockApp.app)
 
-		assert.Equal(t, roundEnded.Name, nextState)
+		assert.Equal(t, STATE_ROUND_ENDED, nextState)
 	})
 
 	t.Run("Next state is player turn when game error happens", func(t *testing.T) {
@@ -53,7 +53,7 @@ func TestSell(t *testing.T) {
 
 		nextState := sell(mockApp.app)
 
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 		assert.True(t, called)
 	})
 
@@ -83,7 +83,7 @@ func TestSell(t *testing.T) {
 		nextState := sell(mockApp.app)
 		output := mockApp.writer.String()
 
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 		assert.True(t, strings.Contains(output, "Invalid input"))
 		assert.False(t, called)
 

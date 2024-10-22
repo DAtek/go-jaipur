@@ -1,5 +1,5 @@
 coverfile := ".coverage"
-pkgs := "./core ./app ./fsm"
+pkgs := "./core ./app"
 
 
 test *opts:

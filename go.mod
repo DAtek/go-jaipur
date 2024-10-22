@@ -1,8 +1,11 @@
 module jaipur
 
-go 1.22
+go 1.23
+
+toolchain go1.23.2
 
 require (
+	github.com/DAtek/fsm v0.1.0
 	github.com/DAtek/gotils v0.1.3
 	github.com/stretchr/testify v1.8.2
 )
