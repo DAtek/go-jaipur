@@ -33,7 +33,7 @@ func TestBuy(t *testing.T) {
 
 		nextState := buy(mockApp.app)
 
-		assert.Equal(t, roundEnded.Name, nextState)
+		assert.Equal(t, STATE_ROUND_ENDED, nextState)
 	})
 
 	t.Run("Transition called take card", func(t *testing.T) {
@@ -64,7 +64,7 @@ func TestBuy(t *testing.T) {
 
 		assert.False(t, called)
 		assert.True(t, strings.Contains(mockApp.writer.String(), "Invalid input"))
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 
 	t.Run("Transition prints game logic error", func(t *testing.T) {
@@ -80,6 +80,6 @@ func TestBuy(t *testing.T) {
 
 		assert.True(t, called)
 		assert.True(t, strings.Contains(mockApp.writer.String(), core.PlayerHasTooManyCardsError.Error()))
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 }

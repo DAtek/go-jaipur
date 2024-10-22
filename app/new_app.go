@@ -2,27 +2,33 @@ package app
 
 import (
 	"io"
-	"jaipur/fsm"
+
+	"github.com/DAtek/fsm"
 )
 
-func NewApp(reader io.Reader, writer io.Writer) *App {
-	driver := fsm.NewFSM([]*fsm.State{&gameStart, &playerTurn, &roundEnded, &gameEnded, &finalState})
+type AppState = fsm.State[App]
+
+func NewApp(reader io.Reader, writer io.Writer) fsm.IFSM {
 
 	app := &App{
-		fsm:    driver,
-		reader: reader,
-		writer: writer,
+		Reader: reader,
+		Writer: writer,
 	}
 
-	playerCommands := playerCommandCollection{
+	app.PlayerCommands = PlayerCommandCollection{
 		"B": func() fsm.StateName { return buy(app) },
 		"S": func() fsm.StateName { return sell(app) },
 		"E": func() fsm.StateName { return exchange(app, parseExchangeInput) },
 	}
 
-	gameStart.Transit = func() fsm.StateName { return startGame(app, input) }
-	playerTurn.Transit = func() fsm.StateName { return doPlayerAction(app, playerCommands) }
-	roundEnded.Transit = func() fsm.StateName { return finishRound(app) }
-	gameEnded.Transit = func() fsm.StateName { return endGame(app) }
-	return app
+	driver := fsm.NewFSM([]*AppState{
+		&gameStarting,
+		&playerTurn,
+		&roundEnded,
+		&gameEnded,
+	},
+		app,
+	)
+
+	return driver
 }

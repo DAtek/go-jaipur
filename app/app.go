@@ -3,12 +3,15 @@ package app
 import (
 	"io"
 	"jaipur/core"
-	"jaipur/fsm"
+
+	"github.com/DAtek/fsm"
 )
 
 type App struct {
-	game   core.IGame
-	fsm    fsm.IFSM
-	reader io.Reader
-	writer io.Writer
+	Game           core.IGame
+	Reader         io.Reader
+	Writer         io.Writer
+	PlayerCommands PlayerCommandCollection
 }
+
+type PlayerCommandCollection map[string]func() fsm.StateName

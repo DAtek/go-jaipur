@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFinishRound(t *testing.T) {
+func TestRoundEnded(t *testing.T) {
 	t.Run("Prints the winner of the round and the scores", func(t *testing.T) {
 		mockApp := newMockApp()
 		winner := core.Name("Susie")
@@ -24,7 +24,7 @@ func TestFinishRound(t *testing.T) {
 			core.Name(johann): 2,
 		}
 
-		finishRound(mockApp.app)
+		roundEnded.Transit(mockApp.app)
 
 		output := mockApp.writer.String()
 		fmt.Printf("output: %s\n", output)
@@ -36,7 +36,7 @@ func TestFinishRound(t *testing.T) {
 	t.Run("Prompts to continue", func(t *testing.T) {
 		mockApp := newMockApp()
 
-		finishRound(mockApp.app)
+		roundEnded.Transit(mockApp.app)
 
 		output := mockApp.writer.String()
 
@@ -52,10 +52,10 @@ func TestFinishRound(t *testing.T) {
 			return nil
 		}
 
-		nextState := finishRound(mockApp.app)
+		nextState := roundEnded.Transit(mockApp.app)
 
 		assert.True(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 
 	t.Run("Panics when finish round return error", func(t *testing.T) {
@@ -64,15 +64,15 @@ func TestFinishRound(t *testing.T) {
 			return core.RoundNotEndedError
 		}
 
-		assert.Panics(t, func() { finishRound(mockApp.app) })
+		assert.Panics(t, func() { roundEnded.Transit(mockApp.app) })
 	})
 
 	t.Run("Next state is game ended when the game is ended", func(t *testing.T) {
 		mockApp := newMockApp()
 		mockApp.game.gameEnded = true
 
-		nextState := finishRound(mockApp.app)
+		nextState := roundEnded.Transit(mockApp.app)
 
-		assert.Equal(t, gameEnded.Name, nextState)
+		assert.Equal(t, STATE_GAME_ENDED, nextState)
 	})
 }

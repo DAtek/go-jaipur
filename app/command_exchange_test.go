@@ -39,7 +39,7 @@ func TestExchange(t *testing.T) {
 		output := mockApp.writer.String()
 
 		assert.True(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 		assert.True(t, strings.Contains(output, clearScreenString))
 	})
 
@@ -60,7 +60,7 @@ func TestExchange(t *testing.T) {
 
 		assert.True(t, strings.Contains(output, "Invalid input for buying."))
 		assert.False(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 
 	t.Run("Displays error message on invalid sell input", func(t *testing.T) {
@@ -87,7 +87,7 @@ func TestExchange(t *testing.T) {
 
 		assert.True(t, strings.Contains(output, "Invalid input for selling."))
 		assert.False(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 
 	t.Run("Displays error message on game error", func(t *testing.T) {
@@ -105,7 +105,7 @@ func TestExchange(t *testing.T) {
 
 		assert.True(t, strings.Contains(output, core.GoodsAmountsMismatchError.Error()))
 		assert.True(t, called)
-		assert.Equal(t, playerTurn.Name, nextState)
+		assert.Equal(t, STATE_PLAYER_TURN, nextState)
 	})
 }
 

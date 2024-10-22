@@ -1,7 +1,6 @@
 package app
 
 import (
-	"bufio"
 	"bytes"
 	"jaipur/core"
 )
@@ -77,9 +76,9 @@ func (game *mockGame) GameWinner() (core.Name, error) {
 	return game.gameWinner()
 }
 
+var _ core.IGame = &mockGame{}
+
 func newMockApp() *mockApp {
-	reader := &bytes.Buffer{}
-	writer := &bytes.Buffer{}
 	game := &mockGame{
 		currentPlayerName: "Max",
 		roundEnded:        false,
@@ -97,18 +96,27 @@ func newMockApp() *mockApp {
 	game.roundWinner = roundWinner
 	game.gameWinner = gameWinner
 	game.finishRound = func() error { return nil }
+	reader := &bytes.Buffer{}
+	writer := &bytes.Buffer{}
 
 	return &mockApp{
 		reader: reader,
 		writer: writer,
 		game:   game,
 		app: &App{
-			reader: bufio.NewReader(reader),
-			writer: writer,
-			game:   game,
+			Reader:         reader,
+			Writer:         writer,
+			Game:           game,
+			PlayerCommands: PlayerCommandCollection{},
 		},
 		exchangeInputParser: func(s string) (core.GoodMap, bool) {
 			return core.GoodMap{}, true
 		},
 	}
 }
+
+type mockReader struct {
+	Read_ func(p []byte) (n int, err error)
+}
+
+func (m *mockReader) Read(p []byte) (n int, err error) { return m.Read_(p) }

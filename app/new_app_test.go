@@ -1,7 +1,7 @@
 package app
 
 import (
-	"jaipur/fsm"
+	"github.com/DAtek/fsm"
 	"strings"
 	"sync"
 	"testing"
@@ -55,6 +55,34 @@ func (ch *channelReaderWriter) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
+type simulationState = fsm.State[simulator]
+
+func newSimulationStateMachine(s *simulator) fsm.IFSM {
+	player1Turn := &simulationState{
+		Name:    "player 1",
+		Transit: func(ctx *simulator) fsm.StateName { return ctx.buyOrSell() },
+	}
+
+	player2Turn := &simulationState{
+		Name:    "player 2",
+		Transit: func(ctx *simulator) fsm.StateName { return ctx.exchange() },
+	}
+
+	showWinner := &simulationState{
+		Name:    "show winner",
+		Transit: func(ctx *simulator) fsm.StateName { return ctx.showWinner() },
+	}
+
+	return fsm.NewFSM[simulator](
+		[]*simulationState{
+			player1Turn,
+			player2Turn,
+			showWinner,
+		},
+		s,
+	)
+}
+
 type simulator struct {
 	player1 string
 	player2 string
@@ -66,32 +94,7 @@ type simulator struct {
 
 func (s *simulator) run() {
 	s.enterPlayerNames()
-
-	player1Turn := fsm.State{
-		Name:    "player 1",
-		Variant: fsm.VariantStart,
-		Transit: func() fsm.StateName { return s.alwaysBuyOrSell() },
-	}
-
-	player2Turn := fsm.State{
-		Name:    "player 2",
-		Variant: fsm.VariantIntermediate,
-		Transit: func() fsm.StateName { return s.alwaysExchange() },
-	}
-
-	showWinner := fsm.State{
-		Name:    "show winner",
-		Variant: fsm.VariantIntermediate,
-		Transit: func() fsm.StateName { return s.showWinner() },
-	}
-
-	finalState := fsm.State{
-		Name:    "final",
-		Variant: fsm.VariantFinal,
-	}
-
-	stateMachine := fsm.NewFSM([]*fsm.State{&player1Turn, &player2Turn, &showWinner, &finalState})
-
+	stateMachine := newSimulationStateMachine(s)
 	stateMachine.Run()
 }
 
@@ -102,7 +105,7 @@ func (s *simulator) enterPlayerNames() {
 	s.simulateInput(s.player2)
 }
 
-func (s *simulator) alwaysBuyOrSell() fsm.StateName {
+func (s *simulator) buyOrSell() fsm.StateName {
 	s.t.Log("PLAYER 1 STATE **********\n")
 	for _, action := range []string{"B", "S"} {
 		for good := range goodAbbreviations {
@@ -128,7 +131,7 @@ func (s *simulator) alwaysBuyOrSell() fsm.StateName {
 	panic("Player 1 couldn't complete the turn")
 }
 
-func (s *simulator) alwaysExchange() fsm.StateName {
+func (s *simulator) exchange() fsm.StateName {
 	s.t.Log("PLAYER 2 STATE **********\n")
 	for good1 := range goodAbbreviations {
 		for good2 := range goodAbbreviations {
@@ -163,7 +166,7 @@ func (s *simulator) showWinner() fsm.StateName {
 		} else {
 			s.winner = &s.player2
 		}
-		return "final"
+		return fsm.STATE_FINAL
 	}
 	if strings.Contains(output, s.player1) {
 		return "player 1"
